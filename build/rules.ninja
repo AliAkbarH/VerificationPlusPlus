@@ -42,7 +42,7 @@ rule CXX_EXECUTABLE_LINKER__MyASTTool
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake -H/home/ali/FYP/MyASTTool -B/home/ali/FYP/MyASTTool/build
+  command = /usr/bin/cmake -H/home/ali/FYP/Verification++ -B/home/ali/FYP/Verification++/build
   description = Re-running CMake...
   generator = 1
 
