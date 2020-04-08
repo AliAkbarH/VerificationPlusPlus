@@ -1,0 +1,3 @@
+/home/ali/FYP/MyASTTool/build/CMakeFiles/rebuild_cache.dir
+/home/ali/FYP/MyASTTool/build/CMakeFiles/MyASTTool.dir
+/home/ali/FYP/MyASTTool/build/CMakeFiles/edit_cache.dir
