@@ -10,7 +10,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/MyASTTool",
-            "args": ["/home/ali/FYP/MyASTTool/sample.cpp"],
+            "args": ["/home/ali/FYP/Verification++/src/sample.cpp", "--"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

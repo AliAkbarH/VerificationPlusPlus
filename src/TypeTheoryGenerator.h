@@ -17,11 +17,19 @@ class TypeTheoryGeneratorVisitor
 {
 public:
     explicit TypeTheoryGeneratorVisitor(ASTContext *Context)
-        : Context(Context){};
+        : Context(Context){
+            FunctionUT="max";
+            functionDecl=NULL;
+        };
 
     bool VisitVarDecl(VarDecl *Decl);
     bool VisitBinaryOperator(BinaryOperator *Expr);
+    bool VisitFunctionDecl(FunctionDecl *Decl);
+    bool VisitReturnStmt(ReturnStmt* Stmt);
     TypeTheoryOutput getOutput();
+    bool FirstVisit;
+    clang::FunctionDecl *functionDecl;
+    string FunctionUT;
 
 private:
     ASTContext *Context;

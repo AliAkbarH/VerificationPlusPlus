@@ -13,7 +13,7 @@ include_directories(
   ${LibClangTooling_INCLUDE_DIRS} "/home/ali/FYP/llvm-project-master/clang/include"
 )
 
-add_executable(MyASTTool MyASTTool.cpp TypeTheoryGenerator.h TypeTheoryGenerator.cpp TypeTheory.h TypeTheory.cpp)
+add_executable(MyASTTool src/MyASTTool.cpp src/TypeTheoryGenerator.h src/TypeTheoryGenerator.cpp src/TypeTheory.h src/TypeTheory.cpp)
 target_link_libraries(MyASTTool
   ${LibClangTooling_LIBRARIES}
 )

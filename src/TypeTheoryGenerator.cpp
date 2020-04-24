@@ -2,26 +2,44 @@
 #include <string>
 #include <typeinfo>
 using namespace std;
+
 void TypeTheoryGeneratorConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 {
+    outs() << "Looking for function " << Visitor.FunctionUT << "\n";
+    Visitor.FirstVisit = true;
     Visitor.TraverseDecl(Context.getTranslationUnitDecl());
-    auto tt=Visitor.getOutput();
-    if(!tt.Variables.empty()){
-        outs()<<"Variables:\n\t";
-        for(int i=0;i<tt.Variables.size();i++){
-            if(!tt.Variables[i].isBOp){
-                outs()<<tt.Variables[i].Name<<": "<<tt.Variables[i].Type<<"\n\t";
+    if (Visitor.functionDecl != NULL)
+        outs() << "Found!\n";
+    else
+    {
+        outs() << "No such function\n";
+        return;
+    }
+    Visitor.FirstVisit = false;
+    Visitor.TraverseFunctionDecl(Visitor.functionDecl);
+
+    auto tt = Visitor.getOutput();
+    if (!tt.Variables.empty())
+    {
+        outs() << "Variables:\n\t";
+        for (int i = 0; i < tt.Variables.size(); i++)
+        {
+            if (!tt.Variables[i].isBOp)
+            {
+                outs() << tt.Variables[i].Name << ": " << tt.Variables[i].Type
+                       << " " << ((tt.Variables[i].isInput) ? "Input " : "") << ((tt.Variables[i].isOutput) ? "Output " : "") << "\n\t";
             }
         }
     }
-    outs()<<"\n";
-    if(!tt.BOperations.empty()){
-        outs()<<"Binary Operations:\n\t";
-        for(int i=0;i<tt.BOperations.size();i++){
-            outs()<<tt.BOperations[i].Name<<"\n\t";
+    outs() << "\n";
+    if (!tt.BOperations.empty())
+    {
+        outs() << "Binary Operations:\n\t";
+        for (int i = 0; i < tt.BOperations.size(); i++)
+        {
+            outs() << tt.BOperations[i].Name << "\n\t";
         }
     }
-    //printTT(outs(), Visitor.getOutput());
 }
 
 std::unique_ptr<clang::ASTConsumer> TypeTheoryGeneratorAction::CreateASTConsumer(
@@ -47,13 +65,13 @@ bool TypeTheoryGeneratorVisitor::VisitVarDecl(VarDecl *Decl)
     if (Context->getSourceManager().isInSystemHeader(Decl->getBeginLoc()))
         return true;
 
-    // auto type = Decl->getType().getAsString();
-    // llvm::outs() << "VarDecl: " << VarNameGenerator(Decl) << " : " << type << "\n";
+    if (FirstVisit)
+        return true;
 
     string type = Decl->getType().getAsString();
 
-        Variable *var = new Variable(VarNameGenerator(Decl), VarTypeConverter(type));
-        TTOutput.AddVariable(var);
+    Variable *var = new Variable(VarNameGenerator(Decl), type);
+    TTOutput.AddVariable(var);
 
     return true;
 }
@@ -64,19 +82,59 @@ bool TypeTheoryGeneratorVisitor::VisitBinaryOperator(BinaryOperator *Expr)
     if (Context->getSourceManager().isInSystemHeader(Expr->getBeginLoc()))
         return true;
 
+    if (FirstVisit)
+        return true;
+
     auto lhs = Expr->getLHS();
     auto rhs = Expr->getRHS();
-
-    // outs() << "Binary Operation: ";
-    // outs() << Expr->getOpcodeStr().str() << "\n\t";
-    // outs() << "RHS: " << lhs->getType().getAsString() << ' ' << "\n\t";
-    // HandleOperand(rhs);
-    // outs() << "\n\t";
-    // outs() << "LHS: " << rhs->getType().getAsString() << "\n\t";
-    // HandleOperand(lhs);
-    // outs() << "\n";
-    BinaryOperation *bOp = new BinaryOperation(HandleOperand(Expr->getLHS()), HandleOperand(Expr->getRHS()), Expr ->getOpcodeStr());
+    BinaryOperation *bOp = new BinaryOperation(HandleOperand(Expr->getLHS()), HandleOperand(Expr->getRHS()), Expr->getOpcodeStr());
     TTOutput.AddBOp(bOp);
+    return true;
+}
+
+bool TypeTheoryGeneratorVisitor::VisitFunctionDecl(FunctionDecl *Decl)
+{
+
+    if (Context->getSourceManager().isInSystemHeader(Decl->getBeginLoc()))
+        return true;
+
+    string name = Decl->getName();
+    if (FirstVisit)
+    {
+        outs() << "Found Function: " << name << "\n";
+        if (name == FunctionUT)
+        {
+            functionDecl = Decl;
+        }
+    }
+    else
+    {
+        auto begin = Decl->param_begin();
+        auto end = Decl->param_end();
+        for (auto i = begin; i != end; i++)
+        {
+            string type = (*i)->getType().getAsString();
+
+            Variable *var = new Variable(VarNameGenerator(*i), type);
+            var->isInput = true;
+            TTOutput.AddVariable(var);
+        }
+    }
+
+    return true;
+}
+
+bool TypeTheoryGeneratorVisitor::VisitReturnStmt(ReturnStmt *Stmt)
+{
+
+    if (Context->getSourceManager().isInSystemHeader(Stmt->getBeginLoc()))
+        return true;
+
+    if (FirstVisit)
+        return true;
+
+    Variable *ret = HandleOperand(Stmt->getRetValue());
+    TTOutput.UpdateToOutput(ret);
     return true;
 }
 
@@ -95,7 +153,7 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
         string name = "IntegerLiteral" + to_string(value);
         string type = "int";
         string valueStr = to_string(value);
-        Variable *var=new Variable(name, type, valueStr);
+        Variable *var = new Variable(name, type, valueStr);
         TTOutput.AddVariable(var);
         return var;
     }
@@ -104,11 +162,11 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
         ArraySubscriptExpr *ind = (ArraySubscriptExpr *)operand;
         Expr *index = ind->getIdx();
         Expr *array = ind->getBase();
-        Variable *indx=HandleOperand(index);
+        Variable *indx = HandleOperand(index);
         TTOutput.UpdateToIndex(indx);
-        BinaryOperation op(indx, HandleOperand(array), "[]");
-        TTOutput.AddBOp(&op);
-        return &op;
+        BinaryOperation *op = new BinaryOperation(indx, HandleOperand(array), "[]");
+        TTOutput.AddBOp(op);
+        return op;
     }
     if (stmtClass == "CXXBoolLiteralExpr")
     {
@@ -124,23 +182,25 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
     if (stmtClass == "BinaryOperator")
     {
         BinaryOperator *op = (BinaryOperator *)operand;
-        Variable *rhs=HandleOperand(op->getRHS());
-        Variable *lhs=HandleOperand(op->getLHS());
-        if(op->isComparisonOp && rhs->Type=="ArrayIndex"){
+        Variable *rhs = HandleOperand(op->getRHS());
+        Variable *lhs = HandleOperand(op->getLHS());
+        if (op->isComparisonOp() && rhs->Type == "ArrayIndex")
+        {
             TTOutput.UpdateToBound(lhs);
         }
-        if(op->isComparisonOp && lhs->Type=="ArrayIndex"){
+        if (op->isComparisonOp() && lhs->Type == "ArrayIndex")
+        {
             TTOutput.UpdateToBound(rhs);
         }
         BinaryOperation *bOp = new BinaryOperation(lhs, rhs, op->getOpcodeStr());
-        
+
         TTOutput.AddBOp(bOp);
         return bOp;
     }
     if (stmtClass == "DeclRefExpr")
     {
         DeclRefExpr *ref = (DeclRefExpr *)operand;
-        VarDecl *decl = (VarDecl*)ref->getDecl();
+        VarDecl *decl = (VarDecl *)ref->getDecl();
         string type = decl->getType().getAsString();
         Variable *var = new Variable(VarNameGenerator(decl), type);
         TTOutput.AddVariable(var);
@@ -150,27 +210,7 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
     return nullptr;
 }
 
-// VariableType TypeTheoryGeneratorVisitor::VarTypeConverter(string type)
-// {
-//     if (type == "int")
-//     {
-//         return VariableType::Int;
-//     }
-//     if (type == "int *")
-//     {
-//         return VariableType::Array;
-//     }
-//     if (type == "char")
-//     {
-//         return VariableType::Char;
-//     }
-//     if (type == "_Bool")
-//     {
-//         return VariableType::Bool;
-//     }
-//     return VariableType::Unknown;
-// }
-
-TypeTheoryOutput TypeTheoryGeneratorVisitor::getOutput(){
+TypeTheoryOutput TypeTheoryGeneratorVisitor::getOutput()
+{
     return TTOutput.DumpToOutput();
 }

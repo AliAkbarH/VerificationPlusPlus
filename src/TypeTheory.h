@@ -60,6 +60,7 @@ public:
     void AddBOp(BinaryOperation *);
     void UpdateToIndex(Variable*);
     void UpdateToBound(Variable*);
+    void UpdateToOutput(Variable*);
     TypeTheoryOutput DumpToOutput();
 private:
     map<string, Variable> VariablesByName;
