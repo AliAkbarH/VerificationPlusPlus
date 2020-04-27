@@ -1,4 +1,6 @@
 #include "traverse.h"
+#include <future>
+#include <chrono>
 using namespace std;
 
 vector<vocab_value_t> traverse::firstEvaluation()
@@ -6,7 +8,10 @@ vector<vocab_value_t> traverse::firstEvaluation()
 	reset();
 
 	//mohammad
-	if(satcount(*my_bdd, my_nodes[0])!=0) return my_oneSAT(*my_bdd, main_node);
+	if(satcount(*my_bdd, my_nodes[0])!=0) {return my_oneSAT(*my_bdd, main_node);}
+	else{
+		return ;
+	}
 }
 void traverse::reset()
 {
@@ -175,11 +180,31 @@ vector<vocab_value_t> traverse::nextEvaluation()
 	}
 	main_node=apply(*my_bdd,&and, main_node,  apply(*my_bdd, &xor, last_assign, 1)); // f & (~last assignment)
 
-	// get an assignment
+	/* get an assignment*/
+	//adding a timeout
+	std::cout << "waiting to get new assignment...\n";
+    std::future_status status;
+	std::future<int> future = std::async(std::launch::async, [](){ 
+        	current_assignment=my_oneSAT(*my_bdd, main_node);
+        	return 1;  
+    	});
 	if(satcount(*my_bdd, my_nodes[0])!=0) {
-		current_assignment=my_oneSAT(*my_bdd, main_node);
+		do {
+			status = future.wait_for(std::chrono::minutes(10));
+			if (status == std::future_status::deferred) {
+				std::cout << "deferred\n";
+			} else if (status == std::future_status::timeout) {
+				std::cout << "timeout \n returning to use old traversal ";
+			} else if (status == std::future_status::ready) {
+				std::cout << "ready!\n";
+			}
+    	} while (status != std::future_status::ready); 
 		return current_assignment;
+		
+		
 	}
+
+	
 }
 
 void traverse::traverseUp()
