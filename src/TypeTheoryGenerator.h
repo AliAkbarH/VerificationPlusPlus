@@ -11,14 +11,15 @@
 using namespace clang;
 using namespace llvm;
 using namespace std;
+using namespace clang::tooling;
 
 class TypeTheoryGeneratorVisitor
     : public RecursiveASTVisitor<TypeTheoryGeneratorVisitor>
 {
 public:
-    explicit TypeTheoryGeneratorVisitor(ASTContext *Context)
+    explicit TypeTheoryGeneratorVisitor(ASTContext *Context, string funcName)
         : Context(Context){
-            FunctionUT="max";
+            FunctionUT=funcName;
             functionDecl=NULL;
         };
 
@@ -43,8 +44,8 @@ private:
 class TypeTheoryGeneratorConsumer : public clang::ASTConsumer
 {
 public:
-    explicit TypeTheoryGeneratorConsumer(ASTContext *Context)
-        : Visitor(Context) {}
+    explicit TypeTheoryGeneratorConsumer(ASTContext *Context, string funcName)
+        : Visitor(Context, funcName) {}
 
     virtual void HandleTranslationUnit(clang::ASTContext &Context);
 
@@ -55,6 +56,12 @@ private:
 class TypeTheoryGeneratorAction : public clang::ASTFrontendAction
 {
 public:
+    string funcName;
+    TypeTheoryGeneratorAction(string funcName);
     virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &Compiler, llvm::StringRef InFile);
 };
+
+
+std::unique_ptr<FrontendActionFactory> newTTFrontendActionFactory(string funcName);
+

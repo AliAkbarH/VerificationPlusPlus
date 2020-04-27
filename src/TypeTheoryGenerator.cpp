@@ -24,7 +24,7 @@ void TypeTheoryGeneratorConsumer::HandleTranslationUnit(clang::ASTContext &Conte
         outs() << "Variables:\n\t";
         for (int i = 0; i < tt.Variables.size(); i++)
         {
-            if (!tt.Variables[i].isBOp)
+            if (!tt.Variables[i].isBOp && !tt.Variables[i].isUOp)
             {
                 outs() << tt.Variables[i].Name << ": " << tt.Variables[i].Type
                        << " " << ((tt.Variables[i].isInput) ? "Input " : "") << ((tt.Variables[i].isOutput) ? "Output " : "") << "\n\t";
@@ -40,13 +40,27 @@ void TypeTheoryGeneratorConsumer::HandleTranslationUnit(clang::ASTContext &Conte
             outs() << tt.BOperations[i].Name << "\n\t";
         }
     }
+
+    outs() << "\n";
+    if (!tt.UOperations.empty())
+    {
+        outs() << "Unary Operations:\n\t";
+        for (int i = 0; i < tt.UOperations.size(); i++)
+        {
+            outs() << tt.UOperations[i].Name << "\n\t";
+        }
+    }
 }
 
 std::unique_ptr<clang::ASTConsumer> TypeTheoryGeneratorAction::CreateASTConsumer(
     clang::CompilerInstance &Compiler, llvm::StringRef InFile)
 {
     return std::unique_ptr<clang::ASTConsumer>(
-        new TypeTheoryGeneratorConsumer(&Compiler.getASTContext()));
+        new TypeTheoryGeneratorConsumer(&Compiler.getASTContext(), funcName));
+}
+
+TypeTheoryGeneratorAction::TypeTheoryGeneratorAction(string funcName){
+    this->funcName=funcName;
 }
 
 string TypeTheoryGeneratorVisitor::VarNameGenerator(VarDecl *Decl)
@@ -206,6 +220,13 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
         TTOutput.AddVariable(var);
         return var;
     }
+    if (stmtClass="UnaryOperator"){
+        UnaryOperator *op =(UnaryOperator *)operand;
+        string opcode = UnaryOperator::getOpcodeStr(op->getOpcode());
+        UnaryOperation *UOp=new UnaryOperation(HandleOperand(op->getSubExpr()), opcode, op->isPrefix());
+        TTOutput.AddUOp(UOp);
+        return UOp;
+    }
 
     return nullptr;
 }
@@ -213,4 +234,20 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
 TypeTheoryOutput TypeTheoryGeneratorVisitor::getOutput()
 {
     return TTOutput.DumpToOutput();
+}
+
+std::unique_ptr<FrontendActionFactory> newTTFrontendActionFactory(string funcName){
+  class SimpleFrontendActionFactory : public FrontendActionFactory {
+  public:
+    string funcName;
+    SimpleFrontendActionFactory(string funcName){
+        this->funcName=funcName;
+    }
+    std::unique_ptr<FrontendAction> create() {
+      return std::make_unique<TypeTheoryGeneratorAction>(funcName);
+    }
+  };
+
+  return std::unique_ptr<FrontendActionFactory>(
+      new SimpleFrontendActionFactory(funcName));
 }

@@ -13,6 +13,7 @@ Variable::Variable(string name, string type, string value)
     Type = type;
     Value = value;
     isBOp = false;
+    isUOp=false;
 }
 BinaryOperation::BinaryOperation(Variable *left, Variable *right, string operation)
 {
@@ -21,6 +22,17 @@ BinaryOperation::BinaryOperation(Variable *left, Variable *right, string operati
     Right = right;
     Operation = operation;
     isBOp = true;
+    isUOp=false;
+}
+
+UnaryOperation::UnaryOperation(Variable *var, string op, bool pre){
+    
+    Operand=var;
+    Operation=op;
+    isPrefix=pre;
+    Name=isPrefix? op + var->Name  : var->Name +op; 
+    isUOp=true;
+    isBOp=false;
 }
 
 void TypeTheoryOutputInternal::AddVariable(Variable *var)
@@ -69,10 +81,19 @@ void TypeTheoryOutputInternal::AddBOp(BinaryOperation *bOp)
     AddVariable(bOp);
 }
 
+void TypeTheoryOutputInternal::AddUOp(UnaryOperation *uOp)
+{
+    AddVariable(uOp->Operand);
+    UOperations.push_back(*uOp);
+    AddVariable(uOp);
+}
+
+
 TypeTheoryOutput TypeTheoryOutputInternal::DumpToOutput()
 {
     TypeTheoryOutput out;
     out.BOperations = BOperations;
+    out.UOperations=UOperations;
     for (auto it = VariablesByName.begin(); it != VariablesByName.end(); ++it)
     {
         out.Variables.push_back(it->second);
