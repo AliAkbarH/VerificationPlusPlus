@@ -12,16 +12,23 @@ using namespace std;
 
 static cl::OptionCategory MyToolCategory("my-ast-tool options");
 
+
+
 int main(int argc, const char **argv)
 {
   if (argc<3){
     outs()<<"Usage MyASTTool source.cpp -- funcName";
     return -1;
   }
-  
-  CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
+
+  const char **a=new const char*[2];
+  a[0]=argv[0];
+  a[1]=argv[1];
+  int ac=2;
+  CommonOptionsParser OptionsParser(ac, a, MyToolCategory);
   ClangTool Tool(OptionsParser.getCompilations(),
                  OptionsParser.getSourcePathList());
   //TypeTheoryGeneratorAction *action= new TypeTheoryGeneratorAction("max");
-  return Tool.run(newTTFrontendActionFactory(argv[2]).get());
+  Tool.run(newTTFrontendActionFactory(argv[2]).get());
+  return 0;
 }

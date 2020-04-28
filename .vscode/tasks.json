@@ -25,7 +25,7 @@
         {
             "label": "cmake build and run",
             "type": "shell",
-            "command": "/usr/bin/cmake --build /home/ali/FYP/Verification++/build --config Debug --target MyASTTool  -- -j 10 && /home/ali/FYP/Verification++/build/MyASTTool src/sample.cpp --",
+            "command": "/usr/bin/cmake --build /home/ali/FYP/Verification++/build --config Debug --target MyASTTool  -- -j 10 && /home/ali/FYP/Verification++/build/MyASTTool src/sample.cpp max",
             "group": "build",
             "presentation": {
                 "echo": true,
