@@ -1189,43 +1189,120 @@ SpecCheckVocab::traverse() {
       user know and return i.e.
       if our choice conform_unsat_cores(...), then skip */
     //cout<<"Mohammad Haj Hussein\n";
-    bool res=false;
+    if(timedout){
+    //using normal traversal
 
-    TIME_IT(totalMatchUnsatCoreTime,timingFlags,TIME_MATCHUC,
-        (res=matchesUnsatCore(choice)))
+      bool res=false;
 
-    if(res) {
-        cout<<"SPCHK: Ignore: subtree satisfies an eliminated pattern.";
-        //check if dont care
-        //read from the file
-        //chexk the roBDD
-        print_vector(choice);
-        return;
+      TIME_IT(totalMatchUnsatCoreTime,timingFlags,TIME_MATCHUC,
+          (res=matchesUnsatCore(choice)))
+
+      if(res) {
+          cout<<"SPCHK: Ignore: subtree satisfies an eliminated pattern.";
+          //check if dont care
+          //read from the file
+          //chexk the roBDD
+          print_vector(choice);
+          return;
+      }
+
+  /*     If depth is equal to choice.size, we have assigned a value of true or false to all
+        the subformulas in the vocab. 
+        So we go over the choice vector and we assert/retract the 
+        associated formulas corresponding to the choice evaluation. 
+  */
+      if(depth==choice.size()) {
+          checkChoice() ;
+          return;
+      }
+
+      //modify position at depth/2
+      choice[depth]=vtt;
+      depth = depth + 1;
+      traverse();
+      depth = depth - 1;
+
+      choice[depth]=vff;
+      depth = depth + 1;
+      traverse();
+      depth = depth - 1;
+      choice[depth]=vuu;
     }
+    else{
+      //using ROBDD here
 
-/*     If depth is equal to choice.size, we have assigned a value of true or false to all
-       the subformulas in the vocab. 
-       So we go over the choice vector and we assert/retract the 
-       associated formulas corresponding to the choice evaluation. 
-*/
-    if(depth==choice.size()) {
+      //remove last used assignment
+      bdd_node last_assign=1;
+      bdd_node my_x;
+      for(int i=0;i<current_assignment.size();i++){
+        my_x=make(my_bdd, i, (int)!current_assignment[i], (int)current_assignment[i]); //transform current assignment to node
+        last_assign=apply(my_bdd,&my_and, last_assign, my_x);
+      }
+      main_node=apply(my_bdd,&my_and, main_node,  apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
+
+      // get an assignment
+      //adding a timeout
+      std::cout << "waiting to get new assignment...\n";
+        std::future_status status;
+      std::future<int> future = std::async(std::launch::async, [this](){ 
+              choice=my_oneSAT(my_bdd, main_node);
+              return 1;  
+          });
+      if(satcount(my_bdd, my_nodes[0])!=0) {
+        do {
+          status = future.wait_for(std::chrono::minutes(10));
+          if (status == std::future_status::deferred) {
+            std::cout << "deferred\n";
+          } else if (status == std::future_status::timeout) {
+            std::cout << "timeout \n returning to use old traversal ";
+            timedout=true;
+          } else if (status == std::future_status::ready) {
+            std::cout << "new assignment is ready!\n";
+          }
+          } while (status != std::future_status::ready); 
         checkChoice() ;
+        traverse();
+        
+      }
+      else{
+        //no more new assignments
         return;
+      }
     }
-
-    //modify position at depth/2
-    choice[depth]=vtt;
-    depth = depth + 1;
-    traverse();
-    depth = depth - 1;
-
-    choice[depth]=vff;
-    depth = depth + 1;
-    traverse();
-    depth = depth - 1;
-    choice[depth]=vuu;
 }
 
+// mohammad 	
+/* my_onesat(B, u) returns one satisfying assignment for node u in B */
+vector<vocab_value_t>SpecCheckVocab::my_oneSAT(bdd B, bdd_node u){
+
+	REQUIRES(is_bdd(B));
+	assert(0 <= u && u < B->size);
+	assert(u != 0);		// bdd not satisfiable! 
+	vector<vocab_value_t> my_choice;
+	if (u == 0){
+		printf("No solutions\n");
+  }
+	else {
+		node a = B->T[u];
+		int v = a->var;
+		while (v <= B->num_vars) {
+			//printf("x[%d]=", v);
+			if (a->low != 0) {
+			//printf("0\n");
+				my_choice.push_back(vff);
+				u = a->low;
+			} 
+			else {
+				//printf("1\n");
+				my_choice.push_back(vtt);
+				u = a->high;
+			}
+			a = B->T[u];
+			v = a->var;
+		}
+	}
+	return my_choice; 
+}
 
 
 #include <fstream>

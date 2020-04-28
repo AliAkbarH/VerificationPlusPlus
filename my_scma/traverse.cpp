@@ -109,7 +109,7 @@ vector<vocab_value_t> traverse::getEvaluation()
 
 vector<vocab_value_t> traverse::nextEvaluation()
 {
-	cout<<"next evaluation mohammad\n";
+	//cout<<"next evaluation mohammad\n";
 	while (true)
 	{
 		//cannot put res check (matchesUnsatCore) here, since if depth=size the choice will be returned
