@@ -1,0 +1,2 @@
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./z3/lib
+script -c "./sc $*" session.$(basename $0).$$.txt
