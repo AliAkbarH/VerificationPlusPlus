@@ -15,6 +15,7 @@
 #include "xalloc.h"
 #include "contracts.h"
 #include "hashtable.h"
+#include "robdd.h"
 #define BDD_LIMIT (1<<20)
 #define BDD_HASHTABLE_SIZE (1<<18)
 #define APPLY_HASHTABLE_SIZE (1<<16)

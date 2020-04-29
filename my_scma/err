@@ -1,0 +1,28 @@
+In file included from ./scma.h:14:0,
+                 from checkchoice.h:19,
+                 from checkchoice.cpp:1:
+./robdd/robdd.h:9:21: error: conflicting declaration ‘typedef struct bdd* bdd’
+ typedef struct bdd* bdd;
+                     ^
+./robdd/robdd.h:9:16: error: ‘struct bdd’ has a previous declaration as ‘struct bdd’
+ typedef struct bdd* bdd;
+                ^
+In file included from checkchoice.h:19:0,
+                 from checkchoice.cpp:1:
+./scma.h:236:9: error: field ‘my_bdd’ has incomplete type
+     bdd my_bdd;
+         ^
+./scma.h: In member function ‘void SpecCheckVocab::initTraversal(bool)’:
+./scma.h:259:7: error: ‘my_bdd’ was not declared in this scope
+       my_bdd=bdd_new(sz);
+       ^
+./scma.h:259:24: error: invalid use of incomplete type ‘struct bdd’
+       my_bdd=bdd_new(sz);
+                        ^
+In file included from ./scma.h:14:0,
+                 from checkchoice.h:19,
+                 from checkchoice.cpp:1:
+./robdd/robdd.h:9:16: error: forward declaration of ‘struct bdd’
+ typedef struct bdd* bdd;
+                ^
+make: *** [bin/checkchoice.o] Error 1

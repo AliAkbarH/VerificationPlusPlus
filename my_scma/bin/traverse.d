@@ -113,19 +113,10 @@ traverse.o: traverse.cpp /usr/include/stdc-predef.h traverse.h \
  /usr/include/c++/4.8/tuple /usr/include/c++/4.8/array \
  /usr/include/c++/4.8/stdexcept \
  /usr/include/c++/4.8/bits/uses_allocator.h \
- /usr/include/c++/4.8/bits/stl_multimap.h scvocval.h robdd/robdd.c \
- /usr/lib/gcc/x86_64-linux-gnu/4.8/include/stdbool.h \
- /usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed/limits.h \
- /usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed/syslimits.h \
- /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
- /usr/include/x86_64-linux-gnu/bits/xopen_lim.h robdd/xalloc.h \
- robdd/contracts.h /usr/include/assert.h robdd/hashtable.h checkchoice.h \
- scTimer.h /usr/include/x86_64-linux-gnu/sys/time.h scTheory.h \
- /usr/include/c++/4.8/cassert /usr/include/c++/4.8/set \
- /usr/include/c++/4.8/bits/stl_set.h \
+ /usr/include/c++/4.8/bits/stl_multimap.h scvocval.h robdd/robdd.h \
+ checkchoice.h scTimer.h /usr/include/x86_64-linux-gnu/sys/time.h \
+ scTheory.h /usr/include/c++/4.8/cassert /usr/include/assert.h \
+ /usr/include/c++/4.8/set /usr/include/c++/4.8/bits/stl_set.h \
  /usr/include/c++/4.8/bits/stl_multiset.h /usr/include/c++/4.8/cstdarg \
  /usr/include/c++/4.8/future /usr/include/c++/4.8/functional \
  /usr/include/c++/4.8/typeinfo /usr/include/c++/4.8/mutex \
@@ -142,4 +133,5 @@ traverse.o: traverse.cpp /usr/include/stdc-predef.h traverse.h \
  /usr/include/c++/4.8/bits/shared_ptr_base.h \
  /usr/include/c++/4.8/backward/auto_ptr.h \
  /usr/include/c++/4.8/condition_variable /usr/include/c++/4.8/atomic \
- /usr/include/c++/4.8/bits/atomic_base.h
+ /usr/include/c++/4.8/bits/atomic_base.h \
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/include/stdbool.h

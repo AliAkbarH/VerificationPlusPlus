@@ -16,4 +16,4 @@ robdd.o: robdd/robdd.c /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/4.8/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h robdd/contracts.h \
- /usr/include/assert.h robdd/hashtable.h
+ /usr/include/assert.h robdd/hashtable.h robdd/robdd.h

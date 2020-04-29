@@ -43,7 +43,7 @@ CXXSOURCES=${wildcard *.cxx}
 
 #mohammad
 # call with make D='-DDEBUG -g' for debug mode
-MYFLAGS=-std=c99 -pedantic #-Wall -Wextra 
+MYFLAGS= -Wall -Wextra -std=c99 -pedantic -Werror -Wno-pragmas
 # D=-DDEBUG -g
 GCC=gcc ${D} ${MYFLAGS}
 ROBDD_DIR=robdd

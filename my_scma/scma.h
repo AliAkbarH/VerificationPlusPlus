@@ -8,16 +8,12 @@
 
 //mohammad
 //using c header
-#ifdef __cplusplus
+
 extern "C"
 {
-#endif
-  #include "robdd/robdd.c"
-
-
-#ifdef __cplusplus
+  #include "robdd/robdd.h"
 }
-#endif
+
 
 
 
