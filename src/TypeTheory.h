@@ -27,6 +27,8 @@ public:
     string Name;
     string Type;
     string Value;
+    int declLine;
+    int declCol;
     bool isBOp;
     bool isUOp;
     bool isInput;
