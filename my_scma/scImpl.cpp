@@ -941,34 +941,29 @@ void SpecCheckVocab::printUnsatCore(unsigned int core_size, Z3_ast *core)
 
   //mohammad
   //eliminating unsat cores
+  my_ROBDD_eliminate_UNSATCORES(pattern);
 }
 
 //mohammad
 void SpecCheckVocab::my_ROBDD_eliminate_UNSATCORES(vector<vocab_value_t> &choice)
 {
   //remove last used assignment
-  bdd_node last_assign = 1;
+  bdd_node current_bad_node = 1;
   bdd_node my_x;
-  for (int i = 0; i < current_assignment.size(); i++)
-  {
-    my_x = make(my_bdd, i, (int)!current_assignment[i], (int)current_assignment[i]); //transform current assignment to node
-    last_assign = apply(my_bdd, &my_and, last_assign, my_x);
-  }
-  main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
+  
 
   unsigned int i = 0;
   for (; i < choice.size(); i++)
   {
-    if (choice[i] == vuu)
+    //neglect nodes with vuu
+    if (!choice[i] == vuu)
     {
-      std::cout << "- ";
-    }
-    else
-    {
-      std::cout << choice.at(i) << " ";
+      my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
+      current_bad_node = apply(my_bdd, &my_and, current_bad_node, my_x); // and important values of the vocabs
     }
   }
-  std::cout << "]" << endl;
+  
+  main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_bad_node, 1)); // f & (~unsatcores)
 }
 
 void SpecCheckVocab::computeEliminatedPatternsFromUnsatChoice(unsigned int core_size, Z3_ast *core)
