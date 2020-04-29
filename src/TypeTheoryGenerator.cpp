@@ -57,6 +57,8 @@ bool TypeTheoryGeneratorVisitor::VisitVarDecl(VarDecl *Decl)
     string type = Decl->getType().getAsString();
 
     Variable *var = new Variable(VarNameGenerator(Decl), type);
+    var->declLine=Context->getSourceManager().getExpansionLineNumber(Decl->getBeginLoc());
+    var->declCol=Context->getSourceManager().getExpansionColumnNumber(Decl->getBeginLoc());
     TTOutput.AddVariable(var);
 
     return true;
@@ -103,6 +105,8 @@ bool TypeTheoryGeneratorVisitor::VisitFunctionDecl(FunctionDecl *Decl)
 
             Variable *var = new Variable(VarNameGenerator(*i), type);
             var->isInput = true;
+            var->declLine=Context->getSourceManager().getSpellingLineNumber((*i)->getBeginLoc());
+            var->declCol=Context->getSourceManager().getSpellingColumnNumber((*i)->getBeginLoc());
             TTOutput.AddVariable(var);
         }
     }
@@ -140,6 +144,8 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
         string type = "int";
         string valueStr = to_string(value);
         Variable *var = new Variable(name, type, valueStr);
+        var->declLine=Context->getSourceManager().getExpansionLineNumber(operand->getBeginLoc());
+        var->declCol=Context->getSourceManager().getExpansionColumnNumber(operand->getBeginLoc());
         TTOutput.AddVariable(var);
         return var;
     }
@@ -161,9 +167,11 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
         string name = "BoolLiteral" + to_string(value);
         string type = "bool";
         string valueStr = to_string(value);
-        Variable var(name, type, valueStr);
-        TTOutput.AddVariable(&var);
-        return &var;
+        Variable *var=new Variable(name, type, valueStr);
+        var->declLine=Context->getSourceManager().getExpansionLineNumber(operand->getBeginLoc());
+        var->declCol=Context->getSourceManager().getExpansionColumnNumber(operand->getBeginLoc());
+        TTOutput.AddVariable(var);
+        return var;
     }
     if (stmtClass == "BinaryOperator")
     {
@@ -189,6 +197,8 @@ Variable *TypeTheoryGeneratorVisitor::HandleOperand(clang::Expr *operand)
         VarDecl *decl = (VarDecl *)ref->getDecl();
         string type = decl->getType().getAsString();
         Variable *var = new Variable(VarNameGenerator(decl), type);
+        var->declLine=Context->getSourceManager().getExpansionLineNumber(operand->getReferencedDeclOfCallee()->getBeginLoc());
+        var->declCol=Context->getSourceManager().getExpansionColumnNumber(operand->getReferencedDeclOfCallee()->getBeginLoc());
         TTOutput.AddVariable(var);
         return var;
     }
