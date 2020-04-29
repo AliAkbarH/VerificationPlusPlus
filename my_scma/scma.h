@@ -8,8 +8,6 @@
 
 //mohammad
 //using c header
-// C header here
-// #include "robdd/robdd.h"
 #ifdef __cplusplus
 extern "C"
 {

@@ -1269,6 +1269,18 @@ SpecCheckVocab::traverse() {
           traverse();
         }
         else{
+          bool res=false;
+          TIME_IT(totalMatchUnsatCoreTime,timingFlags,TIME_MATCHUC,
+          (res=matchesUnsatCore(choice)))
+
+          if(res) {
+              std::cout<<"SPCHK: Ignore: subtree satisfies an eliminated pattern.";
+              //check if dont care
+              //read from the file
+              //chexk the roBDD
+              print_vector(choice);
+              traverse();
+          }
           checkChoice() ;
           traverse();
         }
