@@ -31,43 +31,43 @@ using namespace std;
 
 void print_vector(vector< vocab_value_t> & choice)
 {
-	//	cout<<"SPCHK: choice is: "<<endl;
-	cout<< "[";
+	//	std::cout<<"SPCHK: choice is: "<<endl;
+	std::cout<< "[";
 	unsigned int i = 0;
 	for(;i<choice.size();i++){
 		if (choice[i] == vuu) {
-			cout <<  "- ";
+			std::cout <<  "- ";
 		} else {
-			cout<< choice.at(i) << " ";
+			std::cout<< choice.at(i) << " ";
 		}
 	}
-	cout << "]" << endl;
+	std::cout << "]" << endl;
 }
 
 void
 SpecCheckVocab::printStats() {
-  cout << endl << endl;
-  cout << "SPCHK: Timing and statistics report: " << endl;
-  cout << "       number of vocab clauses: " << vocab.size() << endl;
-  cout << "       number of variables: " << declarations.size() << endl;
-  cout << endl;
-  cout << "       number of queries to user: " << numOfQueries << endl;
-  cout << "       number of vocab based partial assignments: " << numOfVocPartialAssignments << endl;
-  cout << "       number of variable based partial assignments: " << numOfVarPartialAssignments << endl;
-  cout << "       number of unsat cores: " << unsat_cores.size() << endl;
+  std::cout << endl << endl;
+  std::cout << "SPCHK: Timing and statistics report: " << endl;
+  std::cout << "       number of vocab clauses: " << vocab.size() << endl;
+  std::cout << "       number of variables: " << declarations.size() << endl;
+  std::cout << endl;
+  std::cout << "       number of queries to user: " << numOfQueries << endl;
+  std::cout << "       number of vocab based partial assignments: " << numOfVocPartialAssignments << endl;
+  std::cout << "       number of variable based partial assignments: " << numOfVarPartialAssignments << endl;
+  std::cout << "       number of unsat cores: " << unsat_cores.size() << endl;
 
-  cout << "       number of calls to sat solver (Z3): " << numOfSATCalls << endl;
-  cout << endl;
+  std::cout << "       number of calls to sat solver (Z3): " << numOfSATCalls << endl;
+  std::cout << endl;
 
   if (timingFlags == 0) return;
   if (timingFlags & TIME_SPCC) {
-    cout << "       total traverse time (seconds): " << ((double)traverseTime)/1000000 << endl;
+    std::cout << "       total traverse time (seconds): " << ((double)traverseTime)/1000000 << endl;
   }
   if (timingFlags & TIME_SAT) {
-    cout << "       total sat time (micorseconds): " << totalSatTime << endl;
+    std::cout << "       total sat time (micorseconds): " << totalSatTime << endl;
   }
   if (timingFlags & TIME_MATCHUC) {
-    cout << "       total match unsat core time (micorseconds): " << totalMatchUnsatCoreTime << endl;
+    std::cout << "       total match unsat core time (micorseconds): " << totalMatchUnsatCoreTime << endl;
   }
 }
 
@@ -75,7 +75,7 @@ SpecCheckVocab::printStats() {
 void
 SpecCheckVocab::getVocabValuations()
 {
-//GUI: should return this cout as string vocabs valuation vector 
+//GUI: should return this std::cout as string vocabs valuation vector 
     for (unsigned int i = 0; i < vocab.size(); i++) {
         fprintf(stdout, 
                 "  +%2d+ %s is %s \n", i, vocab[i].c_str(),
@@ -91,13 +91,13 @@ void
 SpecCheckVocab::getVocabPartialBadAssignmentsMS(vector <int > partial) 
 {
 
-	cout << "name test" << th->name <<endl;
+	std::cout << "name test" << th->name <<endl;
     if (!partial.empty()) {
         vector<vocab_value_t> pattern;
         for (unsigned int i = 0; i < vocab.size(); i++) {
             pattern.push_back(vuu);
         }
-        cout << "SPCHK: The reason for rejecting the model is the "
+        std::cout << "SPCHK: The reason for rejecting the model is the "
             "partial assignment " << endl;
         unsat_core_t un_c;
         for (unsigned int i = 0; i < partial.size(); i++) {
@@ -105,9 +105,9 @@ SpecCheckVocab::getVocabPartialBadAssignmentsMS(vector <int > partial)
             unsigned int idx = partial[i];
             voc_idx_val_t pr;
             pr.first=idx;
-            cout << pr.first << endl;
+            std::cout << pr.first << endl;
             pr.second=choice[idx];
-            cout << pr.second << endl;
+            std::cout << pr.second << endl;
             un_c.push_back(pr);
 
             pattern[idx] = choice[idx];
@@ -116,7 +116,7 @@ SpecCheckVocab::getVocabPartialBadAssignmentsMS(vector <int > partial)
                     (choice[idx] == vtt ) ? "true" : "false");
         }
             unsat_cores.push_back(un_c);
-            cout << "SPCHK: ignore bad partial assignment: " ;
+            std::cout << "SPCHK: ignore bad partial assignment: " ;
             print_vector(pattern);
         }
 
@@ -135,7 +135,7 @@ do {
                 "  +%2d+ %s is %s \n", i, vocab[i].c_str(),
                 (choice[i] == vtt ) ? "true" : "false");
     }
-    cout << "SPCHK: Type the ids of the vocab formulae that are the "
+    std::cout << "SPCHK: Type the ids of the vocab formulae that are the "
         "reason for rejecting the satisfying example." <<
         "Type '-1'  to finish, '-2' to restart, and '-3' to exit bad vocab formulae option." << endl;
 
@@ -144,7 +144,7 @@ do {
         int vid = 0;
 
         string strvid;
-        cout << "USER > ";
+        std::cout << "USER > ";
         cin >> strvid;
 
         stringstream ss;
@@ -152,10 +152,10 @@ do {
         ss >> vid;
 
         if (ss.fail() ){
-          cout << "SPCHK: the value you entered is not a number. " << endl;
-          cout << "SPCHK: please enter a formula id that is"
+          std::cout << "SPCHK: the value you entered is not a number. " << endl;
+          std::cout << "SPCHK: please enter a formula id that is"
             " part of the reason to reject the satisfying assignment, " << endl;
-          cout << "       -1 to finish, -2 to restart, or -3 to exit." << endl;
+          std::cout << "       -1 to finish, -2 to restart, or -3 to exit." << endl;
           continue;
         }
 
@@ -171,7 +171,7 @@ do {
           repeat = false;
           partial.resize(0);
         } else {
-          cout << "SPCHK: Type the ids of the vocab formulae that are the "
+          std::cout << "SPCHK: Type the ids of the vocab formulae that are the "
         "reason for rejecting the satisfying example." <<
         "Type '-1'  to finish, '-2' to restart, and '-3' to exit bad vocab formulae option." << endl;
 
@@ -183,11 +183,11 @@ do {
         for (unsigned int i = 0; i < vocab.size(); i++) {
             pattern.push_back(vuu);
         }
-        cout << "SPCHK: The reason for rejecting the model is the "
+        std::cout << "SPCHK: The reason for rejecting the model is the "
             "partial assignment " << endl;
         unsat_core_t un_c;
         for (unsigned int i = 0; i < partial.size(); i++) {
-        	cout << i << endl;
+        	std::cout << i << endl;
             unsigned int idx = partial[i];
             voc_idx_val_t pr;
             pr.first=idx;
@@ -199,9 +199,9 @@ do {
                     idx, vocab[idx].c_str(),
                     (choice[idx] == vtt ) ? "true" : "false");
         }
-        cout << "SPCHK: please confirm by typing 'Y'. Restart by typing 'R'. Ignore and continue by typing any other key." << endl;
+        std::cout << "SPCHK: please confirm by typing 'Y'. Restart by typing 'R'. Ignore and continue by typing any other key." << endl;
         char c;
-        cout << "USER > ";
+        std::cout << "USER > ";
         cin >> c;
         if (c == 'R' || c == 'r') {
             partial.resize(0);
@@ -209,10 +209,10 @@ do {
             repeat = true;
         } else if (c == 'Y' || c == 'y') {//GUI: always the case
             unsat_cores.push_back(un_c);
-            cout << "SPCHK: ignore bad partial assignment: " ;
+            std::cout << "SPCHK: ignore bad partial assignment: " ;
             print_vector(pattern);
         } else {
-          cout << "SPCHK: ignoring vocab selection and continuing!" << endl;
+          std::cout << "SPCHK: ignoring vocab selection and continuing!" << endl;
         }
     }
 } while (repeat);
@@ -244,7 +244,7 @@ SpecCheckVocab::buildVocabString() {
 
 string 
 SpecCheckVocab::buildVocabStringFormula() {
-    cout << "SPCHK: building SMT formulae from vocab...";
+    std::cout << "SPCHK: building SMT formulae from vocab...";
     string header = ("(benchmark SMT: ");
     string dec = buildDeclarationsString();
     string voc = buildVocabString();
@@ -257,16 +257,16 @@ void
 SpecCheckVocab::parseFormula() {
     //get final form of assertion and do parsing
     formula_cstr=formula_str.c_str();
-    cout<<endl<<formula_cstr<<endl;
+    std::cout<<endl<<formula_cstr<<endl;
 
-    cout << "SPCHK: parsing SMT formulae..." << endl;
+    std::cout << "SPCHK: parsing SMT formulae..." << endl;
     ctx = mk_ext_context();
     Z3_parse_smtlib_string(ctx->m_context,formula_cstr,0,0,0,0,0,0);
 }
 
 void
 SpecCheckVocab::buildAndParseStringFormula() {
-    cout << "SPCHK: building SMT formulae from vocab...";
+    std::cout << "SPCHK: building SMT formulae from vocab...";
     ctx = mk_ext_context();
     string voc_str("");
     string dec_str("(benchmark SMT: extrafuns(");
@@ -288,9 +288,9 @@ SpecCheckVocab::buildAndParseStringFormula() {
     //get final form of assertion and do parsing
     formula_cstr=formula_str.c_str();
 
-    cout<<endl<<formula_cstr<<endl;
+    std::cout<<endl<<formula_cstr<<endl;
 
-    cout << "SPCHK: parsing SMT formulae..." << endl;
+    std::cout << "SPCHK: parsing SMT formulae..." << endl;
     Z3_parse_smtlib_string(ctx->m_context,formula_cstr,0,0,0,0,0,0);
 }
 
@@ -302,7 +302,7 @@ Z3_get_smtlib_num_assumptions, Z3_get_smtlib_assumption,
 Z3_get_smtlib_num_decls, and Z3_get_smtlib_decl. 
 */
     unsigned int num_declarations = Z3_get_smtlib_num_decls(ctx->m_context);
-    cout << "SPCHK: made " << num_declarations << " declarations as follows." << endl;
+    std::cout << "SPCHK: made " << num_declarations << " declarations as follows." << endl;
 
     unsigned int i = 0;
     for (; i < num_declarations; i++) {
@@ -322,7 +322,7 @@ Z3_get_smtlib_num_decls, and Z3_get_smtlib_decl.
 #ifdef SPCHK_DEBUG
     Name2VarMap_t :: iterator it = name2var.begin();
     for(; it != name2var.end(); it++) {
-        cout << "Map key is " << (*it).first << endl;
+        std::cout << "Map key is " << (*it).first << endl;
     }
 #endif
 }
@@ -403,24 +403,24 @@ SpecCheckVocab::assertParsedFormulae() {
 */
 bool 
 SpecCheckVocab::matchesUnsatCore(vector<vocab_value_t> & pattern) {
-	cout << "name test" << th->name <<endl;
+	std::cout << "name test" << th->name <<endl;
 	for(unsigned int i=0;i<unsat_cores.size();i++) {
     //skip is used to check if one node does  
     //not agree the pattern, break
 		bool skip=false;
     unsat_core_t & ithCore = unsat_cores[i];
     for(int j=0; j<ithCore.size(); j++) {
-          cout << ithCore[j].first << ":" << ithCore[j].second << endl;
+          std::cout << ithCore[j].first << ":" << ithCore[j].second << endl;
     }
 		for(int j=0; j<ithCore.size(); j++) {
       voc_idx_val_t & corePair = ithCore[j];
       //for each node in the unsat_core
 			unsigned int index = corePair.first;
-			cout << "index : " << index <<  endl;
+			std::cout << "index : " << index <<  endl;
 			unsigned int value = corePair.second;
-			cout << "value : " <<  value <<  endl;
+			std::cout << "value : " <<  value <<  endl;
 			if(pattern.at(index) != value) {
-				cout << "skipped : " <<  pattern.at(index) <<  endl;
+				std::cout << "skipped : " <<  pattern.at(index) <<  endl;
 				skip=true; 
 				break;
 			}
@@ -555,7 +555,7 @@ SpecCheckVocab::displayModel( Z3_model model) {
 
 void
 SpecCheckVocab::addChoiceToSpec( ) {
-    cout<<"SPCHK: Adding vocab choice to the specification." <<endl;
+    std::cout<<"SPCHK: Adding vocab choice to the specification." <<endl;
     yesChoices.push_back(choice);
 
     Z3_ast args[2];
@@ -594,9 +594,9 @@ void
 SpecCheckVocab::getPartialAssignment( vector<string> & partials) { //GUI
     //if the answer is no, 
     // ask for the partial assignment to be tested
-    cout<<"Please indicate the variables that "
+    std::cout<<"Please indicate the variables that "
         "present unsatisfying values by name."<<endl;
-    cout<<"Enter the names one at a time and when you're done, enter '0'."<<endl;
+    std::cout<<"Enter the names one at a time and when you're done, enter '0'."<<endl;
     string variable;
     cin>>variable;
     //if the input is '0', we exit the loop since the user has indicated that he's done
@@ -608,7 +608,7 @@ SpecCheckVocab::getPartialAssignment( vector<string> & partials) { //GUI
         if (it == name2var.end()){
             //if input from user does not match any of the variables in the map, then it is invalid
             //display an error message to the user and wait for input again
-            cout<<"You entered '" << variable << "'. This is an "
+            std::cout<<"You entered '" << variable << "'. This is an "
                 "invalid variable name. Please enter a valid"
                 " variable name or '0' to finish."<<endl;
         } else {
@@ -666,7 +666,7 @@ SpecCheckVocab::arrayValue2Formula( Z3_model model, SpecCheckVar & v, Z3_ast val
   formula += ")"; // close equal
   formula += ")"; // close forall
 
-  cout << "SPCHK: array smt formula: " << formula << endl;
+  std::cout << "SPCHK: array smt formula: " << formula << endl;
   return formula;
 }
 
@@ -800,7 +800,7 @@ SpecCheckVocab::computeEliminatedPatternsFromBadPartialAssignments( Z3_model mod
     // push it into the unsat_cores vector
     if(bad.size()>0) {
         unsat_cores.push_back(un_c);
-        cout << "SPCHK: ignore bad partial assignment: " ;
+        std::cout << "SPCHK: ignore bad partial assignment: " ;
         print_vector(pattern);
     }
 }
@@ -822,15 +822,15 @@ SpecCheckVocab::printUnsatCore( unsigned int core_size, Z3_ast * core)
     for (int q = 0; q < core_size; q++) {
       if (th) {
         if (core[q] == quantified_formula_ans_lit) {
-          cout << "SPCHK: quantified clauses [ ";
+          std::cout << "SPCHK: quantified clauses [ ";
           for (unsigned int i = 0; i < vocab.size();i++) {
             VocabNode & node = th->getVocabNode(i,genVocab);
             if (node.isGlobal()) {
-              cout << i << " ";
+              std::cout << i << " ";
               pattern [i] = choice[i];
             }
           }
-          cout << "] are part of the unsat core." << endl;
+          std::cout << "] are part of the unsat core." << endl;
           continue;
         }
       }
@@ -851,7 +851,7 @@ SpecCheckVocab::printUnsatCore( unsigned int core_size, Z3_ast * core)
         } 
       }
     }
-    cout << "SPCHK: Adding unsat core to eliminated patterns...";
+    std::cout << "SPCHK: Adding unsat core to eliminated patterns...";
     print_vector(pattern);
 }
 
@@ -869,11 +869,11 @@ SpecCheckVocab::computeEliminatedPatternsFromUnsatChoice (
     for (int q = 0; q < core_size; q++) {
         if (th) {
           if (core[q] == quantified_formula_ans_lit) {
-//            cout << "SPCHK: quantified formula is part of the unsat core." << endl;
+//            std::cout << "SPCHK: quantified formula is part of the unsat core." << endl;
             for (unsigned int i = 0; i < vocab.size();i++) {
               VocabNode & node = th->getVocabNode(i,genVocab);
               if (node.isGlobal()) {
-//                cout << "node " << i << " is quantified";
+//                std::cout << "node " << i << " is quantified";
                 voc_idx_val_t p;
                 p.first = i;
                 if (choice[i] == vtt) {
@@ -895,16 +895,16 @@ SpecCheckVocab::computeEliminatedPatternsFromUnsatChoice (
 
                 if(j%2==0) {
                     p.second=1;
-        //            cout << "1 ";
+        //            std::cout << "1 ";
                 } else  {
                     p.second=0;
-       //             cout << "0 ";
+       //             std::cout << "0 ";
                 }
 
                 u_c.push_back(p);
                 break;
             } else {
-      //              cout << "- ";
+      //              std::cout << "- ";
             }
         }
     }
@@ -996,7 +996,7 @@ SpecCheckVocab::checkChoiceMS()
 void
 SpecCheckVocab::checkChoice()
 {
-  cout << "SPCHK: checking choice...";
+  std::cout << "SPCHK: checking choice...";
   print_vector(choice);
   choiceAssertRetract();
   /*
@@ -1026,20 +1026,20 @@ SpecCheckVocab::checkChoice()
 
     string smtQuantified = th->buildQuantifiedSMTFormulae(choice, genVocab);
     if (!smtQuantified.empty()){
-      cout << "SPCHK: pushing quantified constraint. " << endl;
+      std::cout << "SPCHK: pushing quantified constraint. " << endl;
       Z3_push(ctx->m_context);
       const char * smtQuantified_cstr = smtQuantified.c_str();
-      //  cout << "SPCHK: parsing quantified formula: " << endl;
-      //  cout << "       " << smtQuantified;
-      //  cout << endl;
+      //  std::cout << "SPCHK: parsing quantified formula: " << endl;
+      //  std::cout << "       " << smtQuantified;
+      //  std::cout << endl;
 
       Z3_parse_smtlib_string(ctx->m_context,smtQuantified_cstr,0,0,0,0,0,0);
       unsigned int num_formulas = Z3_get_smtlib_num_formulas(ctx->m_context);
-      //cout << "num of formula in quantified: " << num_formulas << endl;
+      //std::cout << "num of formula in quantified: " << num_formulas << endl;
       Z3_ast f = Z3_get_smtlib_formula(ctx->m_context, 0);
       const char * f_cstr = Z3_ast_to_string(ctx->m_context, f);
-      cout << "SPCHK: " << f_cstr << endl;
-      cout << endl;
+      std::cout << "SPCHK: " << f_cstr << endl;
+      std::cout << endl;
 
       Z3_sort ty = Z3_mk_bool_sort(ctx->m_context);
       Z3_ast ans_lit = Z3_mk_fresh_const(ctx->m_context, "k", ty);
@@ -1067,7 +1067,7 @@ SpecCheckVocab::checkChoice()
   Z3_model model=0;
   Z3_lbool result;
 
-  cout << "SPCHK: Calling SMT Solver. This may take time.." << endl;
+  std::cout << "SPCHK: Calling SMT Solver. This may take time.." << endl;
 
   TIME_IT(totalSatTime,timingFlags,TIME_SAT,
       (result=Z3_check_assumptions(ctx->m_context, 
@@ -1077,7 +1077,7 @@ SpecCheckVocab::checkChoice()
 #if 0
   if (th) {
     if(quantified_formula_ans_lit) {
-      cout << "SPCHK: popping quantified constraint. " << endl;
+      std::cout << "SPCHK: popping quantified constraint. " << endl;
       Z3_pop(ctx->m_context,1);
     }
   }
@@ -1091,17 +1091,17 @@ SpecCheckVocab::checkChoice()
     numOfQueries++;
     //we create a map table that will be used to map 
     // the name of the variables to their IDs
-    cout<<"SPCHK: choice is satisfiable. \n"
+    std::cout<<"SPCHK: choice is satisfiable. \n"
       "       Is the satisfying assignment below a good model for your property?" << endl;
     static int twice = 2;
     if (twice ) {
-      cout<<
+      std::cout<<
         "       Notice that a specification accepts a don't care assignment. (this notice will be issued only twice)." << endl;
       twice --;
     }
 
     displayModel(model);
-    cout<<"SPCHK: Answer by 'Y' to accept and 'N' to reject the assignment. 'M' to view more details from the solver about the model. " << endl;
+    std::cout<<"SPCHK: Answer by 'Y' to accept and 'N' to reject the assignment. 'M' to view more details from the solver about the model. " << endl;
 
     /*
        Ask the user if the model is a good model as per the 
@@ -1113,7 +1113,7 @@ SpecCheckVocab::checkChoice()
        */
 
     string answer;
-    cout << "USER > ";
+    std::cout << "USER > ";
     cin >>answer;
 
     if (answer == "M" || answer == "m") {
@@ -1121,14 +1121,14 @@ SpecCheckVocab::checkChoice()
       display_model(ctx->m_context,stdout, model) ;
       
       //show the whole model as per z3
-      cout<<"SPCHK: Answer by 'Y' to accept and 'N' to reject the assignment." << endl;
-      cout << "USER > ";
+      std::cout<<"SPCHK: Answer by 'Y' to accept and 'N' to reject the assignment." << endl;
+      std::cout << "USER > ";
       cin >>answer;
     }
     while(answer!="Y" && answer != "y" && answer != "n" && answer!="N") {
-      cout<<"SPCHK: This is an invalid answer."
+      std::cout<<"SPCHK: This is an invalid answer."
         "Please answer by 'Y' for yes or 'N' for no."<<endl;
-      cout << "USER > ";
+      std::cout << "USER > ";
       cin>>answer;
     }
 
@@ -1136,12 +1136,12 @@ SpecCheckVocab::checkChoice()
       addChoiceToSpec();
     } else if(answer=="N" || answer == "n") {
       noChoices.push_back(choice);
-      cout << "SPCHK: If the rejection is due to part of the assignment, " << endl;
-      cout << "       press 'V' to select the bad variables, " << endl;
-      cout << "       press 'B' to select the bad vocabulary values, or" << endl;
-      cout << "       press 'C' to continue." << endl;
+      std::cout << "SPCHK: If the rejection is due to part of the assignment, " << endl;
+      std::cout << "       press 'V' to select the bad variables, " << endl;
+      std::cout << "       press 'B' to select the bad vocabulary values, or" << endl;
+      std::cout << "       press 'C' to continue." << endl;
       char c;
-      cout << "USER > ";
+      std::cout << "USER > ";
       bool repeat = true;
       while (repeat) {
         cin >> c;
@@ -1159,22 +1159,22 @@ SpecCheckVocab::checkChoice()
         } else if (c == 'C' || c == 'c') {
         } else {
           repeat = true;
-          cout << "SPCHK: please enter " << endl;
-          cout << "       press 'V' to select the bad variables, " << endl;
-          cout << "       press 'B' to select the bad vocabulary values, or" << endl;
-          cout << "       press 'C' to continue." << endl;
+          std::cout << "SPCHK: please enter " << endl;
+          std::cout << "       press 'V' to select the bad variables, " << endl;
+          std::cout << "       press 'B' to select the bad vocabulary values, or" << endl;
+          std::cout << "       press 'C' to continue." << endl;
         }
       }
     }
     Z3_del_model(ctx->m_context,model);
   } else  if (result == Z3_L_FALSE) {
-    cout << "SPCHK: choice is not satisfiable. " << endl;
+    std::cout << "SPCHK: choice is not satisfiable. " << endl;
     if (core_size > 0) {
       printUnsatCore( core_size, core);
       computeEliminatedPatternsFromUnsatChoice (core_size, core);
     }
   } else {//result == Z3_L_UNDEF
-    cout << "SPCHK: Z3 failed to compute satisfiability. consider increasing resources. " << endl;
+    std::cout << "SPCHK: Z3 failed to compute satisfiability. consider increasing resources. " << endl;
     exit(0);
   }
 }
@@ -1188,7 +1188,7 @@ SpecCheckVocab::traverse() {
       cores we have till now; if one of the cores is satisfied we let the 
       user know and return i.e.
       if our choice conform_unsat_cores(...), then skip */
-    //cout<<"Mohammad Haj Hussein\n";
+    //std::cout<<"Mohammad Haj Hussein\n";
     if(timedout){
     //using normal traversal
 
@@ -1198,7 +1198,7 @@ SpecCheckVocab::traverse() {
           (res=matchesUnsatCore(choice)))
 
       if(res) {
-          cout<<"SPCHK: Ignore: subtree satisfies an eliminated pattern.";
+          std::cout<<"SPCHK: Ignore: subtree satisfies an eliminated pattern.";
           //check if dont care
           //read from the file
           //chexk the roBDD
@@ -1259,9 +1259,19 @@ SpecCheckVocab::traverse() {
           } else if (status == std::future_status::ready) {
             std::cout << "new assignment is ready!\n";
           }
-          } while (status != std::future_status::ready); 
-        checkChoice() ;
-        traverse();
+          } while (status != std::future_status::ready || status != std::future_status::timeout); 
+        if(timedout){
+          //reinitialize the choice vector
+          //can be improved by enumerating the remainging assignments of the choice vector
+          for(int i=0;i<choice.size();i++) {
+            choice.at(i)=vuu;  
+          }
+          traverse();
+        }
+        else{
+          checkChoice() ;
+          traverse();
+        }
         
       }
       else{
@@ -1495,8 +1505,8 @@ SpecCheckVocab:: readSimplifiedFormulaEqnToTT(const char * filename) {
         formula.replace(i, 6, prefix);
     }
   }
-  cout << "SPCHK: formula after esprersso simplify." << endl;
-  cout << "  " << formula << endl;
+  std::cout << "SPCHK: formula after esprersso simplify." << endl;
+  std::cout << "  " << formula << endl;
   return formula;
 }
 
@@ -1571,8 +1581,8 @@ SpecCheckVocab:: readSimplifiedFormulaKiss(const char * filename,
   }
   formula = ":formula " + formula;
   iEspresso.close();
-  cout << "SPCHK: SMT formula after esprersso simplify." << endl;
-  cout << "  " << formula << endl;
+  std::cout << "SPCHK: SMT formula after esprersso simplify." << endl;
+  std::cout << "  " << formula << endl;
   return formula;
 }
 
@@ -1651,12 +1661,12 @@ SpecCheckVocab:: abcSimplifyR(const string & filename,
   abcFile << ".end" << endl;
   abcFile.close();
 
-  cout << "SPCHK: using abc for simplification." << endl;
-  cout << "SPCHK: abc command is " << abcCommand << endl;
+  std::cout << "SPCHK: using abc for simplification." << endl;
+  std::cout << "SPCHK: abc command is " << abcCommand << endl;
   system("./abc -F abccmd");
 
-  cout << "SPCHK: simplified abc formula is: " << endl;
-  cout << endl;
+  std::cout << "SPCHK: simplified abc formula is: " << endl;
+  std::cout << endl;
 
   string catCommand = "cat " + abcSpecFName;
   system(catCommand.c_str());
@@ -1680,7 +1690,7 @@ SpecCheckVocab:: abcSimplifyRNA(){
   string ofname = filename.str() + ".tt";
   bool res = writeEspressoFile( ofname.c_str(), false, false);
   if (! res) {
-    cout << "SPCHK: abcSimplifyRN:Ignore espresso simplifications." << endl;
+    std::cout << "SPCHK: abcSimplifyRN:Ignore espresso simplifications." << endl;
     return "-1";
   }
 
@@ -1703,14 +1713,14 @@ SpecCheckVocab:: espressoSimplify(){
 
 string
 SpecCheckVocab:: espressoSimplifyR(){
-  cout << "SPCHK: Calling logic minimization (Espresso) to simplify formula." << endl;
+  std::cout << "SPCHK: Calling logic minimization (Espresso) to simplify formula." << endl;
   stringstream filename;
   filename << "yes." << getpid();
 
   string ofname = filename.str() + ".tt";
   bool res = writeEspressoFile( ofname.c_str(), false, false);
   if (! res) {
-    cout << "SPCHK: Ignore espresso simplifications." << endl;
+    std::cout << "SPCHK: Ignore espresso simplifications." << endl;
     return "-1";
   }
   //
@@ -1734,12 +1744,12 @@ SpecCheckVocab:: espressoSimplifyR(){
   string eqnCommand ="./espresso/espresso -Dsimplify -oeqntott " + ofname + " > " + espEqnSimplifiedFName ;
   string kissCommand ="./espresso/espresso -Dsimplify -okiss " + ofname + " > " + espKissSimplifiedFName ;
 
-  cout << "SPCHK: issuing command " << eqnCommand << endl;
+  std::cout << "SPCHK: issuing command " << eqnCommand << endl;
   system (eqnCommand.c_str());
-  cout << "SPCHK: issuing command " << kissCommand << endl;
+  std::cout << "SPCHK: issuing command " << kissCommand << endl;
   system (kissCommand.c_str());
 
-  cout << "SPCHK: output from espresso" << endl;
+  std::cout << "SPCHK: output from espresso" << endl;
   string catCommand = "cat " + espEqnSimplifiedFName;
   system (catCommand.c_str());
 

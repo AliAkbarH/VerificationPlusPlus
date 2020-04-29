@@ -261,7 +261,7 @@ class SpecCheckVocab {
       }
 
       //mohammad
-      bdd_free(my_bdd);
+      //bdd_free(my_bdd);
       my_bdd=bdd_new(sz);
       for(int i=0;i<sz;i++){
         my_nodes.push_back(make(my_bdd, i, 0, 1));
