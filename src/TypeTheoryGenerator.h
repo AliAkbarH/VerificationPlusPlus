@@ -17,10 +17,11 @@ class TypeTheoryGeneratorVisitor
     : public RecursiveASTVisitor<TypeTheoryGeneratorVisitor>
 {
 public:
-    explicit TypeTheoryGeneratorVisitor(ASTContext *Context, string funcName)
+    explicit TypeTheoryGeneratorVisitor(ASTContext *Context, string funcName, TypeTheoryOutput &output)
         : Context(Context){
             FunctionUT=funcName;
             functionDecl=NULL;
+            this->output=&output;
         };
 
     bool VisitVarDecl(VarDecl *Decl);
@@ -31,6 +32,7 @@ public:
     bool FirstVisit;
     clang::FunctionDecl *functionDecl;
     string FunctionUT;
+    TypeTheoryOutput *output;
 
 private:
     ASTContext *Context;
@@ -44,8 +46,8 @@ private:
 class TypeTheoryGeneratorConsumer : public clang::ASTConsumer
 {
 public:
-    explicit TypeTheoryGeneratorConsumer(ASTContext *Context, string funcName)
-        : Visitor(Context, funcName) {}
+    explicit TypeTheoryGeneratorConsumer(ASTContext *Context, string funcName, TypeTheoryOutput &output)
+        : Visitor(Context, funcName, output) {}
 
     virtual void HandleTranslationUnit(clang::ASTContext &Context);
 
@@ -57,11 +59,12 @@ class TypeTheoryGeneratorAction : public clang::ASTFrontendAction
 {
 public:
     string funcName;
-    TypeTheoryGeneratorAction(string funcName);
+    TypeTheoryOutput *output;
+    TypeTheoryGeneratorAction(string funcName, TypeTheoryOutput &output);
     virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &Compiler, llvm::StringRef InFile);
 };
 
 
-std::unique_ptr<FrontendActionFactory> newTTFrontendActionFactory(string funcName);
+std::unique_ptr<FrontendActionFactory> newTTFrontendActionFactory(string funcName, TypeTheoryOutput &output);
 

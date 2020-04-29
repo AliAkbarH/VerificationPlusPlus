@@ -1,6 +1,12 @@
 [
 {
   "directory": "/home/ali/FYP/Verification++/build",
+  "command": "/usr/local/bin/clang++   -I/usr/local/include -I/home/ali/FYP/llvm-project-master/clang/include  -g   -I/usr/local/include    -fno-exceptions -fno-rtti -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-rtti -o CMakeFiles/MyASTTool.dir/src/main.cpp.o -c /home/ali/FYP/Verification++/src/main.cpp",
+  "file": "/home/ali/FYP/Verification++/src/main.cpp"
+},
+
+{
+  "directory": "/home/ali/FYP/Verification++/build",
   "command": "/usr/local/bin/clang++   -I/usr/local/include -I/home/ali/FYP/llvm-project-master/clang/include  -g   -I/usr/local/include    -fno-exceptions -fno-rtti -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-rtti -o CMakeFiles/MyASTTool.dir/src/MyASTTool.cpp.o -c /home/ali/FYP/Verification++/src/MyASTTool.cpp",
   "file": "/home/ali/FYP/Verification++/src/MyASTTool.cpp"
 },

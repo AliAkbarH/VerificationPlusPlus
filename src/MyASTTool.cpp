@@ -1,34 +1,62 @@
-#include "clang/AST/ASTConsumer.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendActions.h"
-#include "clang/Tooling/Tooling.h"
-#include "clang/Tooling/CommonOptionsParser.h"
+#include "MyASTTool.h"
 
-#include "TypeTheoryGenerator.h"
-
-using namespace clang::tooling;
-using namespace std;
-
-static cl::OptionCategory MyToolCategory("my-ast-tool options");
-
-
-
-int main(int argc, const char **argv)
+TypeTheoryOutput ParseFunction(int argc, char **argv)
 {
-  if (argc<3){
-    outs()<<"Usage MyASTTool source.cpp -- funcName";
-    return -1;
+  TypeTheoryOutput *output = new TypeTheoryOutput();
+  if (argc < 3)
+  {
+    outs() << "Usage MyASTTool source funcName";
+  }
+  else
+  {
+    int argc1 = argc - 1;
+    const char **argv1 = new const char *[argc1];
+    for (int i = 0; i < argc1; i++)
+    {
+      argv1[i] = argv[i];
+    }
+    CommonOptionsParser OptionsParser(argc1, argv1, MyToolCategory);
+    ClangTool Tool(OptionsParser.getCompilations(),
+                   OptionsParser.getSourcePathList());
+
+    Tool.run(newTTFrontendActionFactory(argv[argc1], *output).get());
   }
 
-  const char **a=new const char*[2];
-  a[0]=argv[0];
-  a[1]=argv[1];
-  int ac=2;
-  CommonOptionsParser OptionsParser(ac, a, MyToolCategory);
-  ClangTool Tool(OptionsParser.getCompilations(),
-                 OptionsParser.getSourcePathList());
-  //TypeTheoryGeneratorAction *action= new TypeTheoryGeneratorAction("max");
-  Tool.run(newTTFrontendActionFactory(argv[2]).get());
-  return 0;
+  return *output;
+}
+
+
+void PrintTypeTheoryOutput(TypeTheoryOutput tt){
+
+    if (!tt.Variables.empty())
+    {
+        outs() << "Variables:\n\t";
+        for (int i = 0; i < tt.Variables.size(); i++)
+        {
+            if (!tt.Variables[i].isBOp && !tt.Variables[i].isUOp)
+            {
+                outs() << tt.Variables[i].Name << ": " << tt.Variables[i].Type
+                       << " " << ((tt.Variables[i].isInput) ? "Input " : "") << ((tt.Variables[i].isOutput) ? "Output " : "") << "\n\t";
+            }
+        }
+    }
+    outs() << "\n";
+    if (!tt.BOperations.empty())
+    {
+        outs() << "Binary Operations:\n\t";
+        for (int i = 0; i < tt.BOperations.size(); i++)
+        {
+            outs() << tt.BOperations[i].Name << "\n\t";
+        }
+    }
+
+    outs() << "\n";
+    if (!tt.UOperations.empty())
+    {
+        outs() << "Unary Operations:\n\t";
+        for (int i = 0; i < tt.UOperations.size(); i++)
+        {
+            outs() << tt.UOperations[i].Name << "\n\t";
+        }
+    }
 }

@@ -19,48 +19,20 @@ void TypeTheoryGeneratorConsumer::HandleTranslationUnit(clang::ASTContext &Conte
     Visitor.TraverseFunctionDecl(Visitor.functionDecl);
 
     auto tt = Visitor.getOutput();
-    if (!tt.Variables.empty())
-    {
-        outs() << "Variables:\n\t";
-        for (int i = 0; i < tt.Variables.size(); i++)
-        {
-            if (!tt.Variables[i].isBOp && !tt.Variables[i].isUOp)
-            {
-                outs() << tt.Variables[i].Name << ": " << tt.Variables[i].Type
-                       << " " << ((tt.Variables[i].isInput) ? "Input " : "") << ((tt.Variables[i].isOutput) ? "Output " : "") << "\n\t";
-            }
-        }
-    }
-    outs() << "\n";
-    if (!tt.BOperations.empty())
-    {
-        outs() << "Binary Operations:\n\t";
-        for (int i = 0; i < tt.BOperations.size(); i++)
-        {
-            outs() << tt.BOperations[i].Name << "\n\t";
-        }
-    }
-
-    outs() << "\n";
-    if (!tt.UOperations.empty())
-    {
-        outs() << "Unary Operations:\n\t";
-        for (int i = 0; i < tt.UOperations.size(); i++)
-        {
-            outs() << tt.UOperations[i].Name << "\n\t";
-        }
-    }
+    *(Visitor.output)=tt;
+    
 }
 
 std::unique_ptr<clang::ASTConsumer> TypeTheoryGeneratorAction::CreateASTConsumer(
     clang::CompilerInstance &Compiler, llvm::StringRef InFile)
 {
     return std::unique_ptr<clang::ASTConsumer>(
-        new TypeTheoryGeneratorConsumer(&Compiler.getASTContext(), funcName));
+        new TypeTheoryGeneratorConsumer(&Compiler.getASTContext(), funcName, *output));
 }
 
-TypeTheoryGeneratorAction::TypeTheoryGeneratorAction(string funcName){
+TypeTheoryGeneratorAction::TypeTheoryGeneratorAction(string funcName, TypeTheoryOutput &output){
     this->funcName=funcName;
+    this->output=&output;
 }
 
 string TypeTheoryGeneratorVisitor::VarNameGenerator(VarDecl *Decl)
@@ -236,18 +208,20 @@ TypeTheoryOutput TypeTheoryGeneratorVisitor::getOutput()
     return TTOutput.DumpToOutput();
 }
 
-std::unique_ptr<FrontendActionFactory> newTTFrontendActionFactory(string funcName){
+std::unique_ptr<FrontendActionFactory> newTTFrontendActionFactory(string funcName, TypeTheoryOutput &output){
   class SimpleFrontendActionFactory : public FrontendActionFactory {
   public:
     string funcName;
-    SimpleFrontendActionFactory(string funcName){
+    TypeTheoryOutput *output;
+    SimpleFrontendActionFactory(string funcName,TypeTheoryOutput &output){
         this->funcName=funcName;
+        this->output=&(output);
     }
     std::unique_ptr<FrontendAction> create() {
-      return std::make_unique<TypeTheoryGeneratorAction>(funcName);
+      return std::make_unique<TypeTheoryGeneratorAction>(funcName, *output);
     }
   };
 
   return std::unique_ptr<FrontendActionFactory>(
-      new SimpleFrontendActionFactory(funcName));
+      new SimpleFrontendActionFactory(funcName, output));
 }

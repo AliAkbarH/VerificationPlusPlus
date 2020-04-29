@@ -42,6 +42,7 @@ void TypeTheoryOutputInternal::AddVariable(Variable *var)
     {
         pair<string, Variable> pair(var->Name, *var);
         VariablesByName.insert(pair);
+        Variables.push_back(*var);
     }
 }
 void TypeTheoryOutputInternal::UpdateToIndex(Variable *var)
