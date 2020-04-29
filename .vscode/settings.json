@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "vector": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "future": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "initializer_list": "cpp",
+        "robdd.c": "cpp"
     }
 }

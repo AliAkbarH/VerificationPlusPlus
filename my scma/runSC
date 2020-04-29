@@ -1,8 +1,0 @@
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./z3/lib
-make
-if [ $? -eq 0 ]; then
-  echo "make successful"
-  script -c "./sc $*" session.$(basename $0).$$.txt
-else 
-  echo "make failed"
-fi
