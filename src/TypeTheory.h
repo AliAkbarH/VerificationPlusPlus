@@ -28,6 +28,7 @@ public:
     string Type;
     string Value;
     bool isBOp;
+    bool isUOp;
     bool isInput;
     bool isOutput;
     
@@ -43,23 +44,37 @@ public:
     string Operation;
 };
 
+class UnaryOperation : public Variable
+{
+public:
+    UnaryOperation(Variable*, string, bool );
 
-class TypeTheoryOutput{
+    string Operation;
+    Variable *Operand;
+    bool isPrefix;
+
+};
+
+class TypeTheoryOutput
+{
 public:
     vector<Variable> Variables;
     vector<BinaryOperation> BOperations;
+    vector<UnaryOperation> UOperations;
 };
-
 
 class TypeTheoryOutputInternal
 {
 public:
     vector<Variable> Variables;
     vector<BinaryOperation> BOperations;
+    vector<UnaryOperation> UOperations;
     void AddVariable(Variable *);
     void AddBOp(BinaryOperation *);
+    void AddUOp(UnaryOperation *);
     void UpdateToIndex(Variable*);
     void UpdateToBound(Variable*);
+    void UpdateToOutput(Variable*);
     TypeTheoryOutput DumpToOutput();
 private:
     map<string, Variable> VariablesByName;
