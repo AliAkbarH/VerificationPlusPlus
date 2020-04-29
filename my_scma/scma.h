@@ -347,6 +347,9 @@ class SpecCheckVocab {
     void computePrintCorrection();
     int compute_options(int argc, char ** argv);
     bool readTheoryFile();
+
+    //mohammad
+    void my_ROBDD_eliminate_UNSATCORES(vector< vocab_value_t> & choice);
 };
 void print_vector(vector< vocab_value_t> & choice);
 #else
