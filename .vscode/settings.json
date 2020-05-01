@@ -2,6 +2,7 @@
     "files.associations": {
         "vector": "cpp",
         "*.inc": "cpp",
+<<<<<<< HEAD
         "future": "cpp",
         "array": "cpp",
         "bitset": "cpp",
@@ -46,5 +47,8 @@
         "type_traits": "cpp",
         "utility": "cpp",
         "typeinfo": "cpp"
+=======
+        "ostream": "cpp"
+>>>>>>> 8dadae8ad6cf1316f80eea2d6835b79f6444aa73
     }
 }
