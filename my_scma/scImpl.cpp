@@ -941,30 +941,30 @@ void SpecCheckVocab::printUnsatCore(unsigned int core_size, Z3_ast *core)
 
   //mohammad
   //eliminating unsat cores
-  my_ROBDD_eliminate_UNSATCORES(pattern);
+  //my_ROBDD_eliminate_UNSATCORES(pattern);
 }
 
 //mohammad
-void SpecCheckVocab::my_ROBDD_eliminate_UNSATCORES(vector<vocab_value_t> &choice)
-{
-  //remove last used assignment
-  bdd_node current_bad_node = 1;
-  bdd_node my_x;
+// void SpecCheckVocab::my_ROBDD_eliminate_UNSATCORES(vector<vocab_value_t> &choice)
+// {
+//   //remove last used assignment
+//   bdd_node current_bad_node = 1;
+//   bdd_node my_x;
   
 
-  unsigned int i = 0;
-  for (; i < choice.size(); i++)
-  {
-    //neglect nodes with vuu
-    if (!choice[i] == vuu)
-    {
-      my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
-      current_bad_node = apply(my_bdd, &my_and, current_bad_node, my_x); // and important values of the vocabs
-    }
-  }
+//   unsigned int i = 0;
+//   for (; i < choice.size(); i++)
+//   {
+//     //neglect nodes with vuu
+//     if (!choice[i] == vuu)
+//     {
+//       my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
+//       current_bad_node = apply(my_bdd, &my_and, current_bad_node, my_x); // and important values of the vocabs
+//     }
+//   }
   
-  main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_bad_node, 1)); // f & (~unsatcores)
-}
+//   main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_bad_node, 1)); // f & (~unsatcores)
+// }
 
 void SpecCheckVocab::computeEliminatedPatternsFromUnsatChoice(unsigned int core_size, Z3_ast *core)
 {
@@ -1379,85 +1379,85 @@ void SpecCheckVocab::traverse()
   }
   else
   {
-    //using ROBDD here
+    // //using ROBDD here
 
-    //remove last used assignment
-    bdd_node last_assign = 1;
-    bdd_node my_x;
-    for (int i = 0; i < current_assignment.size(); i++)
-    {
-      my_x = make(my_bdd, i, (int)!current_assignment[i], (int)current_assignment[i]); //transform current assignment to node
-      last_assign = apply(my_bdd, &my_and, last_assign, my_x);
-    }
-    main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
+    // //remove last used assignment
+    // bdd_node last_assign = 1;
+    // bdd_node my_x;
+    // for (int i = 0; i < current_assignment.size(); i++)
+    // {
+    //   my_x = make(my_bdd, i, (int)!current_assignment[i], (int)current_assignment[i]); //transform current assignment to node
+    //   last_assign = apply(my_bdd, &my_and, last_assign, my_x);
+    // }
+    // main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
 
-    // get an assignment
-    //adding a timeout
-    std::cout << "waiting to get new assignment...\n";
-    std::future_status status;
-    std::future<int> future = std::async(std::launch::async, [this]() {
-      choice = my_oneSAT(my_bdd, main_node);
-      return 1;
-    });
-    if (satcount(my_bdd, my_nodes[0]) != 0)
-    {
-      do
-      {
-        status = future.wait_for(std::chrono::minutes(10));
-        if (status == std::future_status::deferred)
-        {
-          std::cout << "deferred\n";
-        }
-        else if (status == std::future_status::timeout)
-        {
-          std::cout << "timeout \n returning to use old traversal ";
-          timedout = true;
-        }
-        else if (status == std::future_status::ready)
-        {
-          std::cout << "new assignment is ready!\n";
-        }
-      } while (status != std::future_status::ready || status != std::future_status::timeout);
-      if (timedout)
-      {
-        //reinitialize the choice vector
-        //can be improved by enumerating the remainging assignments of the choice vector
-        for (int i = 0; i < choice.size(); i++)
-        {
-          choice.at(i) = vuu;
-        }
-        traverse();
-      }
-      else
-      {
-        bool res = false;
-        TIME_IT(totalMatchUnsatCoreTime, timingFlags, TIME_MATCHUC,
-                (res = matchesUnsatCore(choice)))
+    // // get an assignment
+    // //adding a timeout
+    // std::cout << "waiting to get new assignment...\n";
+    // std::future_status status;
+    // std::future<int> future = std::async(std::launch::async, [this]() {
+    //   choice = my_oneSAT(my_bdd, main_node);
+    //   return 1;
+    // });
+    // if (satcount(my_bdd, my_nodes[0]) != 0)
+    // {
+    //   do
+    //   {
+    //     status = future.wait_for(std::chrono::minutes(10));
+    //     if (status == std::future_status::deferred)
+    //     {
+    //       std::cout << "deferred\n";
+    //     }
+    //     else if (status == std::future_status::timeout)
+    //     {
+    //       std::cout << "timeout \n returning to use old traversal ";
+    //       timedout = true;
+    //     }
+    //     else if (status == std::future_status::ready)
+    //     {
+    //       std::cout << "new assignment is ready!\n";
+    //     }
+    //   } while (status != std::future_status::ready || status != std::future_status::timeout);
+    //   if (timedout)
+    //   {
+    //     //reinitialize the choice vector
+    //     //can be improved by enumerating the remainging assignments of the choice vector
+    //     for (int i = 0; i < choice.size(); i++)
+    //     {
+    //       choice.at(i) = vuu;
+    //     }
+    //     traverse();
+    //   }
+    //   else
+    //   {
+    //     bool res = false;
+    //     TIME_IT(totalMatchUnsatCoreTime, timingFlags, TIME_MATCHUC,
+    //             (res = matchesUnsatCore(choice)))
 
-        if (res)
-        {
-          std::cout << "SPCHK: Ignore: subtree satisfies an eliminated pattern.";
-          //check if dont care
-          //read from the file
-          //chexk the roBDD
-          print_vector(choice);
-          traverse();
-        }
-        checkChoice();
-        traverse();
-      }
-    }
-    else
-    {
-      //no more new assignments
-      return;
-    }
+    //     if (res)
+    //     {
+    //       std::cout << "SPCHK: Ignore: subtree satisfies an eliminated pattern.";
+    //       //check if dont care
+    //       //read from the file
+    //       //chexk the roBDD
+    //       print_vector(choice);
+    //       traverse();
+    //     }
+    //     checkChoice();
+    //     traverse();
+    //   }
+    // }
+    // else
+    // {
+    //   //no more new assignments
+    //   return;
+    // }
   }
 }
 
 // mohammad
 /* my_onesat(B, u) returns one satisfying assignment for node u in B */
-vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd B, bdd_node u)
+/*vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd B, bdd_node u)
 {
 
   REQUIRES(is_bdd(B));
@@ -1492,7 +1492,7 @@ vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd B, bdd_node u)
     }
   }
   return my_choice;
-}
+}*/
 
 #include <fstream>
 

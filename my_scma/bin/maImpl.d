@@ -112,10 +112,9 @@ maImpl.o: maImpl.cpp /usr/include/stdc-predef.h scz3helpers.h \
  /usr/include/c++/4.8/tuple /usr/include/c++/4.8/array \
  /usr/include/c++/4.8/stdexcept \
  /usr/include/c++/4.8/bits/uses_allocator.h \
- /usr/include/c++/4.8/bits/stl_multimap.h scvocval.h robdd/robdd.h \
- checkchoice.h /usr/include/c++/4.8/sstream \
- /usr/include/c++/4.8/bits/sstream.tcc scTimer.h \
- /usr/include/x86_64-linux-gnu/sys/time.h scTheory.h \
+ /usr/include/c++/4.8/bits/stl_multimap.h scvocval.h checkchoice.h \
+ /usr/include/c++/4.8/sstream /usr/include/c++/4.8/bits/sstream.tcc \
+ scTimer.h /usr/include/x86_64-linux-gnu/sys/time.h scTheory.h \
  /usr/include/c++/4.8/cassert /usr/include/assert.h \
  /usr/include/c++/4.8/set /usr/include/c++/4.8/bits/stl_set.h \
  /usr/include/c++/4.8/bits/stl_multiset.h /usr/include/c++/4.8/cstdarg

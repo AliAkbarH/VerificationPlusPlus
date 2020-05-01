@@ -9,11 +9,11 @@
 //mohammad
 //using c header
 
-extern "C"
+/*extern "C"
 {
   #include "robdd/robdd.h"
-  
-}
+
+}*/
 
 
 
@@ -234,10 +234,10 @@ class SpecCheckVocab {
     }
 
     //mohammad
-    bdd my_bdd;
-    vector<bdd_node> my_nodes;
-    bdd_node main_node=1;
-    vector<vocab_value_t> current_assignment;
+    // bdd my_bdd;
+    // vector<bdd_node> my_nodes;
+    // bdd_node main_node=1;
+    // vector<vocab_value_t> current_assignment;
     bool timedout; //mohammad, false to use ROBDD, true to use normal BDD
 
     void initTraversal(bool isVocTraversal = true) {
@@ -257,14 +257,15 @@ class SpecCheckVocab {
 
       //mohammad
       //bdd_free(my_bdd);
-      my_bdd=bdd_new(sz);
-      for(int i=0;i<sz;i++){
-        my_nodes.push_back(make(my_bdd, i, 0, 1));
-      }
-      timedout=false;
+      // my_bdd=bdd_new(sz);
+      // for(int i=0;i<sz;i++){
+      //   my_nodes.push_back(make(my_bdd, i, 0, 1));
+      // }
+      timedout=true;
     }
 
-    vector<vocab_value_t> my_oneSAT(bdd B, bdd_node u); //mohammad
+    //mohammad
+    // vector<vocab_value_t> my_oneSAT(bdd B, bdd_node u); //mohammad
 
     void initEquivTraversal() {
       initTraversal(false);

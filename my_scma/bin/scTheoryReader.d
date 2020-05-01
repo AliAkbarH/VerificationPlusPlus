@@ -182,8 +182,7 @@ scTheoryReader.o: scTheoryReader.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/4.8/bits/stl_set.h \
  /usr/include/c++/4.8/bits/stl_multiset.h /usr/include/c++/4.8/cstdarg \
  scvocval.h z3/include/z3.h z3/include/z3_macros.h z3/include/z3_api.h \
- scma.h robdd/robdd.h checkchoice.h /usr/include/memory.h \
- /usr/include/setjmp.h /usr/include/c++/4.8/sstream \
- /usr/include/c++/4.8/bits/sstream.tcc /usr/include/c++/4.8/cstring \
- /usr/include/c++/4.8/bitset scTimer.h \
+ scma.h checkchoice.h /usr/include/memory.h /usr/include/setjmp.h \
+ /usr/include/c++/4.8/sstream /usr/include/c++/4.8/bits/sstream.tcc \
+ /usr/include/c++/4.8/cstring /usr/include/c++/4.8/bitset scTimer.h \
  /usr/include/x86_64-linux-gnu/sys/time.h
