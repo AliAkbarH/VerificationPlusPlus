@@ -1,6 +1,8 @@
 #include <string>
 #include <iostream>
 
+//mohammad: including code of haidoura
+//#include "MyASTTool.h"
 using namespace std;
 
 extern int spchk_main(int argc, char ** argv);// defined in sc.cpp
@@ -8,6 +10,10 @@ extern int spchk_main(int argc, char ** argv);// defined in sc.cpp
 extern int ma_main(int argc, char ** argv);// defined in ma.cpp
 
 int main(int argc, char ** argv) {
+  //mohammad: calling code of haidoura to call the parser
+  // TypeTheoryOutput out=ParseFunction(argc, argv);
+  // PrintTypeTheoryOutput(out);
+  
   string program=argv[0];
   program+="#";
 

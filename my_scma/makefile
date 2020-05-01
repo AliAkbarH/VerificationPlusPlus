@@ -45,9 +45,11 @@ CXXSOURCES=${wildcard *.cxx}
 # call with make D='-DDEBUG -g' for debug mode
 MYFLAGS= -Wall -Wextra -std=c99 -pedantic -Werror -Wno-pragmas
 # D=-DDEBUG -g
+D=-D_ROBDD_H_
 GCC=gcc ${D} ${MYFLAGS}
 ROBDD_DIR=robdd
 CCSOURCES_ROBDD=$(subst robdd/,,${wildcard robdd/*.c})
+CXXSOURCES_ROBDD=$(subst robdd/,,${wildcard robdd/*.cpp})
 
 ANTLR_DIR=antlr
 ANTLR_LIB=$(ANTLR_DIR)/libantlr3c-3.2/.libs/libantlr3c.a
@@ -84,6 +86,7 @@ echo:
 SOURCE_DEPENDENCIES=$(patsubst %.cpp,$(BIN_DIR)/%.d,$(CPP_FILTER_SOURCES)) \
                     $(patsubst %.C,$(BIN_DIR)/%.d,$(CCSOURCES))  \
 					$(patsubst %.c,$(BIN_DIR)/%.d,$(CCSOURCES_ROBDD))  \
+					$(patsubst %.cpp,$(BIN_DIR)/%.d,$(CXXSOURCES_ROBDD))  \
                     $(patsubst %.cxx,$(BIN_DIR)/%.d,$(CXXSOURCES)) \
                     $(patsubst %.c,$(BIN_DIR)/%.d,$(C_FILTER_SOURCES)) \
                     $(ANTLR_DEPENDENCIES) \
@@ -171,6 +174,10 @@ $(BIN_DIR)/%.d: %.c
 $(BIN_DIR)/%.d: robdd/%.c
 	@echo "CC CFLAGS -M $< > $@"
 	@$(GCC) $(MYFLAGS) -M $< > $@
+#mohammad
+$(BIN_DIR)/%.d: robdd/%.cpp
+	@echo "CXX CXXFLAGS -M $< > $@"
+	@$(CXX) $(CXXFLAGS) -M $< > $@
 
 #rules to make object files from c/cplusplus code
 $(BIN_DIR)/%.o: %.cpp $(BIN_DIR)/%.d
@@ -201,7 +208,10 @@ $(BIN_DIR)/%.o: %.c $(BIN_DIR)/%.d
 $(BIN_DIR)/%.o: robdd/%.c $(BIN_DIR)/%.d
 	@echo "CC CFLAGS -c -o $@ $<"
 	@$(GCC) $(MYFLAGS) -c -o $@ $<
-
+#mohammad
+$(BIN_DIR)/%.o: robdd/%.cpp $(BIN_DIR)/%.d
+	@echo "CXX CXXFLAGS -c -o $@ $<"
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 clean: cleanaux
 	@rm -rf $(TARGET)
 

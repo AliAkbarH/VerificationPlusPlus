@@ -111,11 +111,13 @@ scOptions.o: scOptions.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/4.8/bits/stl_relops.h /usr/include/c++/4.8/array \
  /usr/include/c++/4.8/stdexcept \
  /usr/include/c++/4.8/bits/uses_allocator.h \
- /usr/include/c++/4.8/bits/stl_multimap.h scvocval.h checkchoice.h \
- /usr/include/memory.h /usr/include/string.h /usr/include/setjmp.h \
- /usr/include/c++/4.8/sstream /usr/include/c++/4.8/bits/sstream.tcc \
- /usr/include/c++/4.8/cstring /usr/include/c++/4.8/bitset scTimer.h \
+ /usr/include/c++/4.8/bits/stl_multimap.h scvocval.h robdd/robdd.h \
+ robdd/xalloc.h robdd/contracts.h /usr/include/assert.h robdd/hashtable.h \
+ robdd/contracts.h checkchoice.h /usr/include/memory.h \
+ /usr/include/string.h /usr/include/setjmp.h /usr/include/c++/4.8/sstream \
+ /usr/include/c++/4.8/bits/sstream.tcc /usr/include/c++/4.8/cstring \
+ /usr/include/c++/4.8/bitset scTimer.h \
  /usr/include/x86_64-linux-gnu/sys/time.h scTheory.h \
- /usr/include/c++/4.8/cassert /usr/include/assert.h \
- /usr/include/c++/4.8/set /usr/include/c++/4.8/bits/stl_set.h \
+ /usr/include/c++/4.8/cassert /usr/include/c++/4.8/set \
+ /usr/include/c++/4.8/bits/stl_set.h \
  /usr/include/c++/4.8/bits/stl_multiset.h /usr/include/c++/4.8/cstdarg

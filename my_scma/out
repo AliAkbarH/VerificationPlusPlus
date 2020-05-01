@@ -1,1 +1,10 @@
-CXX CXXFLAGS -c -o bin/checkchoice.o checkchoice.cpp
+CC CFLAGS -M robdd/hashtable.c > bin/hashtable.d
+CC CFLAGS -c -o bin/hashtable.o robdd/hashtable.c
+CC CFLAGS -c -o bin/xalloc.o robdd/xalloc.c
+CXX CXXFLAGS -c -o bin/robdd.o robdd/robdd.cpp
+CXX CXXFLAGS -c -o bin/scmaLexer.o scmaLexer.cpp
+java -jar antlr/antlr-3.2.jar scma.g
+mv scmaLexer.c scmaLexer.cpp
+mv scmaParser.c scmaParser.cpp
+CXX CXXFLAGS -c -o bin/scmaParser.o scmaParser.cpp
+g++ -o sc ./bin/checkchoice.o ./bin/grammar.o ./bin/ma.o ./bin/maImpl.o ./bin/main.o ./bin/sc.o ./bin/scDeclarations.o ./bin/scGenVocab.o ./bin/scImpl.o ./bin/scOptions.o ./bin/scTheory.o ./bin/scTheoryReader.o ./bin/scz3helpers.o ./bin/traverse.o ./bin/variable.o ./bin/hashtable.o ./bin/xalloc.o ./bin/robdd.o ./bin/scmaLexer.o ./bin/scmaParser.o -L z3/lib/ -lz3 ./antlr/libantlr3c-3.2/.libs/libantlr3c.a -lrt

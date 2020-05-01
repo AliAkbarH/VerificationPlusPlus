@@ -5,17 +5,52 @@
 
 #ifndef _ROBDD_H_
 #define _ROBDD_H_
+#include <vector>
+extern "C"
+{
+#include "xalloc.h"
+#include "contracts.h"
+#include "hashtable.h"
+}
 
-typedef struct bdd* bdd;
+using namespace std;
 typedef int bdd_node;
-bdd bdd_new(int k);		/* k variables */
-void bdd_free(bdd B);
-int bdd_size(bdd B);		/* total number of nodes */
-bdd_node make(bdd B, int var, bdd_node low, bdd_node high);
-bdd_node apply(bdd B, int (*func)(int b1, int b2), bdd_node u1, bdd_node u2);
-int satcount(bdd B, bdd_node u);
-void onesat(bdd B, bdd_node u);
-void allsat(bdd B, bdd_node u);
+struct node
+{
+    int var;       /* variables v, v1, v2, ... */
+    bdd_node low;  /* low successor */
+    bdd_node high; /* high successor */
+};
+
+class bdd
+{
+public:
+//should be private
+    int num_vars;     /* variables 1 <= v <= num_vars */
+    int limit;        /* limit = \length(T) */
+    int size;         /* 0 <= size < limit */
+    vector<node *> T; /* node array */
+    tableptr H;       /* mapping a = (var,low,high) to u, where T[u] = a */
+
+//this part here is public
+    void bdd_free();
+    void allsat(bdd_node u);
+    int bdd_size(); /* total number of nodes */
+    void onesat(bdd_node u);
+    int satcount(bdd_node u);
+};
+
+typedef struct bdd *bddptr;
+
+bddptr bdd_new(int k); /* k variables */
+
+
+bdd_node make(bddptr B, int var, bdd_node low, bdd_node high);
+bdd_node apply(bddptr B, int (*func)(int b1, int b2), bdd_node u1, bdd_node u2);
+
+
+
+bool is_bdd(bddptr B);
 int my_and(int b1, int b2);
 int my_or(int b1, int b2);
 int my_xor(int b1, int b2);

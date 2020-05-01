@@ -1,28 +1,24 @@
-In file included from ./scma.h:14:0,
-                 from checkchoice.h:19,
-                 from checkchoice.cpp:1:
-./robdd/robdd.h:9:21: error: conflicting declaration ‘typedef struct bdd* bdd’
- typedef struct bdd* bdd;
-                     ^
-./robdd/robdd.h:9:16: error: ‘struct bdd’ has a previous declaration as ‘struct bdd’
- typedef struct bdd* bdd;
-                ^
-In file included from checkchoice.h:19:0,
-                 from checkchoice.cpp:1:
-./scma.h:236:9: error: field ‘my_bdd’ has incomplete type
-     bdd my_bdd;
-         ^
-./scma.h: In member function ‘void SpecCheckVocab::initTraversal(bool)’:
-./scma.h:259:7: error: ‘my_bdd’ was not declared in this scope
-       my_bdd=bdd_new(sz);
+scmaParser.cpp: In function ‘SCTheory* translation_unit(pscmaParser)’:
+scmaParser.cpp:985:7: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     d = NULL;
        ^
-./scma.h:259:24: error: invalid use of incomplete type ‘struct bdd’
-       my_bdd=bdd_new(sz);
+scmaParser.cpp: In function ‘unsigned int declaration(pscmaParser)’:
+scmaParser.cpp:1672:26: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     unsigned int varid = NULL;
+                          ^
+scmaParser.cpp: In function ‘scmaParser_declaration_specifier_return declaration_specifier(pscmaParser)’:
+scmaParser.cpp:1863:7: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     m = NULL;
+       ^
+scmaParser.cpp: In function ‘unsigned int type_modifier(pscmaParser)’:
+scmaParser.cpp:1982:25: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     unsigned int mode = NULL;
+                         ^
+scmaParser.cpp: In function ‘scstring declarator(pscmaParser)’:
+scmaParser.cpp:2180:24: warning: passing NULL to non-pointer argument 1 of ‘scstring::scstring(long int)’ [-Wconversion-null]
+     scstring varname = NULL;
                         ^
-In file included from ./scma.h:14:0,
-                 from checkchoice.h:19,
-                 from checkchoice.cpp:1:
-./robdd/robdd.h:9:16: error: forward declaration of ‘struct bdd’
- typedef struct bdd* bdd;
-                ^
-make: *** [bin/checkchoice.o] Error 1
+scmaParser.cpp: In function ‘scstring direct_declarator(pscmaParser)’:
+scmaParser.cpp:2983:24: warning: passing NULL to non-pointer argument 1 of ‘scstring::scstring(long int)’ [-Wconversion-null]
+     scstring varname = NULL;
+                        ^

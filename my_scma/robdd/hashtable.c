@@ -48,8 +48,8 @@ void list_free(list p, void (*elem_free)(ht_elem e)) {
 /* chains */
 
 chain chain_new ();
-ht_elem chain_insert(table H, chain C, ht_elem e);
-ht_elem chain_search(table H, chain C, ht_key k);
+ht_elem chain_insert(tableptr H, chain C, ht_elem e);
+ht_elem chain_search(tableptr H, chain C, ht_key k);
 void chain_free(chain C, void (*elem_free)(ht_elem e));
 
 struct chain {
@@ -72,7 +72,7 @@ chain chain_new()
 /* chain_find(p, k) returns list element whose
  * data field has key k, or NULL if none exists
  */
-list chain_find(table H, chain C, ht_key k)
+list chain_find(tableptr H, chain C, ht_key k)
 { REQUIRES(is_chain(C));
   list p = C->list;
   while (p != NULL) {
@@ -83,7 +83,7 @@ list chain_find(table H, chain C, ht_key k)
   return NULL;
 }
 
-ht_elem chain_insert(table H, chain C, ht_elem e)
+ht_elem chain_insert(tableptr H, chain C, ht_elem e)
 { REQUIRES(is_chain(C) && e != NULL);
   list p = chain_find(H, C, (*H->elem_key)(e));
   if (p == NULL) {
@@ -103,7 +103,7 @@ ht_elem chain_insert(table H, chain C, ht_elem e)
   }
 }
 
-ht_elem chain_search(table H, chain C, ht_key k)
+ht_elem chain_search(tableptr H, chain C, ht_key k)
 { REQUIRES(is_chain(C));
   list p = chain_find(H, C, k);
   if (p == NULL) return NULL;
@@ -124,7 +124,7 @@ void chain_free(chain C, void (*elem_free)(ht_elem e))
 /* is_h_chain(C, h, m) - all of chain C's keys are equal to h */
 /* keys should also be pairwise distinct, but we do not check that */
 /* table size is m */
-bool is_h_chain (table H, chain C, int h, int m)
+bool is_h_chain (tableptr H, chain C, int h, int m)
 { REQUIRES(0 <= h && h < m);
   if (C == NULL) return false;
   list p = C->list;
@@ -137,7 +137,7 @@ bool is_h_chain (table H, chain C, int h, int m)
   return true;
 }
 
-bool is_table(table H)
+bool is_table(tableptr H)
 //@requires H != NULL && H->size == \length(H->array);
 {
   int i; int m;
@@ -151,13 +151,13 @@ bool is_table(table H)
   return true;
 }
 
-table table_new(int init_size,
+tableptr table_new(int init_size,
 		 ht_key (*elem_key)(ht_elem e),
 		 bool (*equal)(ht_key k1, ht_key k2),
 		 int (*hash)(ht_key k, int m))
 { REQUIRES(init_size > 1);
   chain* A = xcalloc(init_size, sizeof(chain));
-  table H = xmalloc(sizeof(struct table));
+  tableptr H = xmalloc(sizeof(struct table));
   H->size = init_size;
   H->num_elems = 0;
   H->array = A;			/* all initialized to NULL; */
@@ -168,7 +168,7 @@ table table_new(int init_size,
   return H;
 }
 
-ht_elem table_insert(table H, ht_elem e) 
+ht_elem table_insert(tableptr H, ht_elem e) 
 { REQUIRES(is_table(H));
   ht_elem old_e;
   ht_key k = (*H->elem_key)(e);
@@ -183,7 +183,7 @@ ht_elem table_insert(table H, ht_elem e)
   return NULL;
 }
 
-ht_elem table_search(table H, ht_key k)
+ht_elem table_search(tableptr H, ht_key k)
 { REQUIRES(is_table(H));
   int h = (*H->hash)(k, H->size);
   if (H->array[h] == NULL) return NULL;
@@ -192,7 +192,7 @@ ht_elem table_search(table H, ht_key k)
   return e;
 }
 
-void table_free(table H, void (*elem_free)(ht_elem e))
+void table_free(tableptr H, void (*elem_free)(ht_elem e))
 { REQUIRES(is_table(H));
   int i;
   for (i = 0; i < H->size; i++) {

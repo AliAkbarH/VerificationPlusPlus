@@ -939,32 +939,30 @@ void SpecCheckVocab::printUnsatCore(unsigned int core_size, Z3_ast *core)
   std::cout << "SPCHK: Adding unsat core to eliminated patterns...";
   print_vector(pattern);
 
-  //mohammad
-  //eliminating unsat cores
-  //my_ROBDD_eliminate_UNSATCORES(pattern);
+  //mohammad: eliminating unsat cores
+  my_ROBDD_eliminate_UNSATCORES(pattern);
 }
 
-//mohammad
-// void SpecCheckVocab::my_ROBDD_eliminate_UNSATCORES(vector<vocab_value_t> &choice)
-// {
-//   //remove last used assignment
-//   bdd_node current_bad_node = 1;
-//   bdd_node my_x;
+//mohammad: eliminating unsat cores
+void SpecCheckVocab::my_ROBDD_eliminate_UNSATCORES(vector<vocab_value_t> &choice)
+{
+  //remove last used assignment
+  bdd_node current_bad_node = 1;
+  bdd_node my_x;
   
-
-//   unsigned int i = 0;
-//   for (; i < choice.size(); i++)
-//   {
-//     //neglect nodes with vuu
-//     if (!choice[i] == vuu)
-//     {
-//       my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
-//       current_bad_node = apply(my_bdd, &my_and, current_bad_node, my_x); // and important values of the vocabs
-//     }
-//   }
+  unsigned int i = 0;
+  for (; i < choice.size(); i++)
+  {
+    //neglect nodes with vuu
+    if (!choice[i] == vuu)
+    {
+      my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
+      current_bad_node = apply(my_bdd, &my_and, current_bad_node, my_x); // and important values of the vocabs
+    }
+  }
   
-//   main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_bad_node, 1)); // f & (~unsatcores)
-// }
+  main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_bad_node, 1)); // f & (~unsatcores)
+}
 
 void SpecCheckVocab::computeEliminatedPatternsFromUnsatChoice(unsigned int core_size, Z3_ast *core)
 {
@@ -1334,6 +1332,7 @@ void SpecCheckVocab::traverse()
       cores we have till now; if one of the cores is satisfied we let the 
       user know and return i.e.
       if our choice conform_unsat_cores(...), then skip */
+  
   //std::cout<<"Mohammad Haj Hussein\n";
   if (timedout)
   {
@@ -1455,9 +1454,8 @@ void SpecCheckVocab::traverse()
   }
 }
 
-// mohammad
-/* my_onesat(B, u) returns one satisfying assignment for node u in B */
-/*vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd B, bdd_node u)
+// mohammad: my_onesat(B, u) returns one satisfying assignment for node u in B
+vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bddptr B, bdd_node u)
 {
 
   REQUIRES(is_bdd(B));
@@ -1470,7 +1468,7 @@ void SpecCheckVocab::traverse()
   }
   else
   {
-    node a = B->T[u];
+    node* a = B->T[u];
     int v = a->var;
     while (v <= B->num_vars)
     {
@@ -1492,7 +1490,7 @@ void SpecCheckVocab::traverse()
     }
   }
   return my_choice;
-}*/
+}
 
 #include <fstream>
 
