@@ -16,5 +16,7 @@ bdd_node apply(bdd B, int (*func)(int b1, int b2), bdd_node u1, bdd_node u2);
 int satcount(bdd B, bdd_node u);
 void onesat(bdd B, bdd_node u);
 void allsat(bdd B, bdd_node u);
-
+int my_and(int b1, int b2);
+int my_or(int b1, int b2);
+int my_xor(int b1, int b2);
 #endif
