@@ -14,6 +14,16 @@ int max(int a, int b, int c){
     return max;
 }
 
+int min(int a, int b, int c){
+    if(a<=b){
+        if(a<=c) return a;
+        return c;
+    }
+    if(b<=c) return b;
+    return c;
+}
+
+
 int main(int argc, char *argv[])
 {
     int n;

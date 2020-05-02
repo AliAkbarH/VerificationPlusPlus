@@ -4,14 +4,12 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
-        
         {
             "name": "clang++ build and debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/MyASTTool",
-            "args": ["/home/ali/FYP/Verification++/src/sample.cpp", "max"],
+            "args": ["/home/ali/FYP/Verification++/src/sample.cpp", "min"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -21,7 +19,7 @@
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
-                    "ignoreFailures": true,
+                    "ignoreFailures": true
                 }
             ],
             "preLaunchTask": "cmake build",

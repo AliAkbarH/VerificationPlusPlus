@@ -63,6 +63,8 @@ public:
     vector<Variable> Variables;
     vector<BinaryOperation> BOperations;
     vector<UnaryOperation> UOperations;
+    vector<Variable> RetrurnedVariables;
+    Variable FunctionUT;
 };
 
 class TypeTheoryOutputInternal
@@ -71,6 +73,8 @@ public:
     vector<Variable> Variables;
     vector<BinaryOperation> BOperations;
     vector<UnaryOperation> UOperations;
+    vector<Variable> RetrurnedVariables;
+    Variable FunctionUT;
     void AddVariable(Variable *);
     void AddBOp(BinaryOperation *);
     void AddUOp(UnaryOperation *);

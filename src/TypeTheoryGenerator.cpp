@@ -93,6 +93,11 @@ bool TypeTheoryGeneratorVisitor::VisitFunctionDecl(FunctionDecl *Decl)
         if (name == FunctionUT)
         {
             functionDecl = Decl;
+            Variable fun;
+            fun.Name=Decl->getNameAsString();
+            fun.Type=Decl->getReturnType().getAsString();
+            TTOutput.FunctionUT=fun;
+
         }
     }
     else
@@ -125,6 +130,11 @@ bool TypeTheoryGeneratorVisitor::VisitReturnStmt(ReturnStmt *Stmt)
 
     Variable *ret = HandleOperand(Stmt->getRetValue());
     TTOutput.UpdateToOutput(ret);
+    Variable retStmt;
+    retStmt.Name=ret->Name;
+    retStmt.declLine=Context->getSourceManager().getSpellingLineNumber(Stmt->getBeginLoc());
+    retStmt.declCol=Context->getSourceManager().getSpellingColumnNumber(Stmt->getBeginLoc());
+    TTOutput.RetrurnedVariables.push_back(retStmt);
     return true;
 }
 
