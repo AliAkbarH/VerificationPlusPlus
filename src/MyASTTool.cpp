@@ -25,38 +25,48 @@ TypeTheoryOutput ParseFunction(int argc, char **argv)
   return *output;
 }
 
+void PrintTypeTheoryOutput(TypeTheoryOutput tt)
+{
 
-void PrintTypeTheoryOutput(TypeTheoryOutput tt){
+  if (!tt.Variables.empty())
+  {
+    outs() << "Variables:\n\t";
+    for (int i = 0; i < tt.Variables.size(); i++)
+    {
+      if (!tt.Variables[i].isBOp && !tt.Variables[i].isUOp)
+      {
+        outs() << tt.Variables[i].Name << ": " << tt.Variables[i].Type
+               << " " << ((tt.Variables[i].isInput) ? "Input " : "") << ((tt.Variables[i].isOutput) ? "Output " : "") << "\n\t";
+      }
+    }
+  }
+  outs() << "\n";
+  if (!tt.BOperations.empty())
+  {
+    outs() << "Binary Operations:\n\t";
+    for (int i = 0; i < tt.BOperations.size(); i++)
+    {
+      outs() << tt.BOperations[i].Name << "\n\t";
+    }
+  }
 
-    if (!tt.Variables.empty())
+  outs() << "\n";
+  if (!tt.UOperations.empty())
+  {
+    outs() << "Unary Operations:\n\t";
+    for (int i = 0; i < tt.UOperations.size(); i++)
     {
-        outs() << "Variables:\n\t";
-        for (int i = 0; i < tt.Variables.size(); i++)
-        {
-            if (!tt.Variables[i].isBOp && !tt.Variables[i].isUOp)
-            {
-                outs() << tt.Variables[i].Name << ": " << tt.Variables[i].Type
-                       << " " << ((tt.Variables[i].isInput) ? "Input " : "") << ((tt.Variables[i].isOutput) ? "Output " : "") << "\n\t";
-            }
-        }
+      outs() << tt.UOperations[i].Name << "\n\t";
     }
-    outs() << "\n";
-    if (!tt.BOperations.empty())
+  }
+  outs() << "\n";
+  if (!tt.RetrurnedVariables.empty())
+  {
+    outs() << "Returned Variables:\n\t";
+    for (int i = 0; i < tt.RetrurnedVariables.size(); i++)
     {
-        outs() << "Binary Operations:\n\t";
-        for (int i = 0; i < tt.BOperations.size(); i++)
-        {
-            outs() << tt.BOperations[i].Name << "\n\t";
-        }
+      outs() << tt.RetrurnedVariables[i].Name << "\n\t";
     }
-
-    outs() << "\n";
-    if (!tt.UOperations.empty())
-    {
-        outs() << "Unary Operations:\n\t";
-        for (int i = 0; i < tt.UOperations.size(); i++)
-        {
-            outs() << tt.UOperations[i].Name << "\n\t";
-        }
-    }
+  }
+  outs() << "\n";
 }

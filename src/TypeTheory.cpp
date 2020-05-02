@@ -95,6 +95,8 @@ TypeTheoryOutput TypeTheoryOutputInternal::DumpToOutput()
     TypeTheoryOutput out;
     out.BOperations = BOperations;
     out.UOperations=UOperations;
+    out.FunctionUT=FunctionUT;
+    out.RetrurnedVariables=RetrurnedVariables;
     for (auto it = VariablesByName.begin(); it != VariablesByName.end(); ++it)
     {
         out.Variables.push_back(it->second);

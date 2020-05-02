@@ -58,3 +58,11 @@
 14401	18483	1588198173	MyASTTool	ad0df3783f7173fa
 2	14945	1588198324	CMakeFiles/MyASTTool.dir/src/TypeTheoryGenerator.cpp.o	b50dc71d612b6a8d
 14945	19163	1588198329	MyASTTool	ad0df3783f7173fa
+0	213	1588395382	build.ninja	29815f7650bcebab
+3	2532	1588395385	CMakeFiles/MyASTTool.dir/src/TypeTheory.cpp.o	c29db0f6a5e0fffb
+1	7654	1588395390	CMakeFiles/MyASTTool.dir/src/main.cpp.o	eb6edec32d2e1f8a
+2	7869	1588395390	CMakeFiles/MyASTTool.dir/src/MyASTTool.cpp.o	4872743ce95ab086
+2	11730	1588395393	CMakeFiles/MyASTTool.dir/src/TypeTheoryGenerator.cpp.o	b50dc71d612b6a8d
+11731	17781	1588395400	MyASTTool	ad0df3783f7173fa
+1	14751	1588395564	CMakeFiles/MyASTTool.dir/src/TypeTheoryGenerator.cpp.o	b50dc71d612b6a8d
+14751	19440	1588395569	MyASTTool	ad0df3783f7173fa
