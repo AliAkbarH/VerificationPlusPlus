@@ -5,7 +5,6 @@
 
 #ifndef _ROBDD_H_
 #define _ROBDD_H_
-#include <vector>
 #include <iostream>
 extern "C"
 {

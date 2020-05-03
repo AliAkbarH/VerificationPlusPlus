@@ -1490,7 +1490,6 @@ void SpecCheckVocab::traverse()
 // mohammad: my_onesat(B, u) returns one satisfying assignment for node u in B
 vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd *B, bdd_node u)
 {
-
   REQUIRES(is_bdd(B));
   assert(0 <= u && u < B->size);
   assert(u != 0); // bdd not satisfiable!
@@ -1504,6 +1503,7 @@ vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd *B, bdd_node u)
     node *a = B->T[u];
     int v = a->var;
     std::cout << B->num_vars << endl;
+    std::cout << v << endl;
     while (v <= B->num_vars)
     {
       //printf("x[%d]=", v);

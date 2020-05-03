@@ -434,9 +434,9 @@ int bdd::satcount(int u)
 
   tableptr H = table_new(SATCOUNT_HASHTABLE_SIZE,
                          &satc_key, &satc_equal, &satc_hash);
-  std::cout << "something"<<(this->T[u])->var - 1 << endl;
+  // std::cout << "something"<<(this->T[u])->var - 1 << endl;
   int num = safe_shiftl(satcount_rec(this, u, H), (this->T[u])->var - 1); /* could overflow */
-  std::cout << "mohammad robdd" << endl;
+  // std::cout << "mohammad robdd" << endl;
   table_free(H, &satc_free);
   return num;
 }
