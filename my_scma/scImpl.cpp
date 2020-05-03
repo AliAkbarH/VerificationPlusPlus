@@ -1410,11 +1410,14 @@ void SpecCheckVocab::traverse()
       {
         if (choice[i] != vuu)
         {
-          my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
+          my_x = make(my_bdd, i+1, (int)!choice[i], (int)choice[i]); //transform current assignment to node
           last_assign = apply(my_bdd, &my_and, last_assign, my_x);
         }
       }
+      
       main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
+      std::cout << "main node: "<<main_node<<"\n";
+      std::cout << "finished removing\n";
     }
     // get an assignment
     //adding a timeout
@@ -1445,7 +1448,19 @@ void SpecCheckVocab::traverse()
     //     std::cout << "new assignment is ready!\n";
     //   }
     // } while (status != std::future_status::ready || status != std::future_status::timeout);
-    choice = my_oneSAT(my_bdd, main_node);
+
+    // if (!finished_first_traversal)
+    // {
+    //   for (int i = 0; i < choice.size(); i++)
+    //   {
+    //     choice.at(i) = vtt;
+    //   }
+    // }
+    // else
+    // {
+      std::cout << "Getting an assignment\n";
+      choice = my_oneSAT(my_bdd, main_node);
+    // }
     // std::cout<<"size of choice "<<choice.size()<<endl;
     // print_vector(choice);
     if (timedout)
@@ -1502,8 +1517,7 @@ vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd *B, bdd_node u)
   {
     node *a = B->T[u];
     int v = a->var;
-    std::cout << B->num_vars << endl;
-    std::cout << v << endl;
+    std::cout <<"v: "<< v << endl;
     while (v <= B->num_vars)
     {
       //printf("x[%d]=", v);
@@ -1522,6 +1536,7 @@ vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd *B, bdd_node u)
       }
       a = B->T[u];
       v = a->var;
+      std::cout << "v: "<<v << endl;
     }
   }
   return my_choice;

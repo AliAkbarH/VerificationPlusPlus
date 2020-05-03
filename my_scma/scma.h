@@ -279,11 +279,17 @@ public:
       my_bdd->bdd_free();
     }
     my_bdd = bdd_new(sz);
+    bdd_node intermediate_node = 1;
+    bdd_node my_x, my_both_x;
     for (int i = 0; i < sz; i++)
     {
-      my_nodes.push_back(make(my_bdd, i + 1, 0, 1));
+      // my_nodes.push_back(make(my_bdd, i + 1, 0, 1));
+      my_x = make(my_bdd, i+1, 0, 1); //transform current assignment to node
+      my_both_x = apply(my_bdd, &my_or, my_x, apply(my_bdd, &my_xor, my_x, 1)); // x[i] \/ ~x[i]
+      main_node = apply(my_bdd, &my_and, main_node, my_both_x);
     }
-    timedout = false;
+    // main_node = apply(my_bdd, &my_and, last_assign, my_both_x);
+    timedout = true;
     finished_first_traversal = false;
 
     //std::cout<<"\nMohammad Haj Hussein\n";

@@ -1,5 +1,0 @@
-Script started on Sat 02 May 2020 05:13:01 PM EEST
-non-option ARGV-elements: eina.th 
-Failed to open file -b
--b-b-b
-Script done on Sat 02 May 2020 05:13:01 PM EEST
