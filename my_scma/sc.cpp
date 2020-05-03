@@ -103,8 +103,10 @@ int spchk_main(int argc, char ** argv) {//today
   spchk.buildAndParseStringFormula();
   spchk.printDeclarations();
   spchk.assertParsedFormulae();
+  
   spchk.initTraversal();
-  cout << spchk.theoryFileName;
+  cout << spchk.theoryFileName<<endl;
+  
   
   cout<<"SPCHK: enumerating vocab evaluations using recursive traversal..."<<endl;
   TIME_IT(spchk.traverseTime,spchk.timingFlags,TIME_SPCC,

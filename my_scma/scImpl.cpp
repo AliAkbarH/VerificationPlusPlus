@@ -943,26 +943,46 @@ void SpecCheckVocab::printUnsatCore(unsigned int core_size, Z3_ast *core)
   my_ROBDD_eliminate_UNSATCORES(pattern);
 }
 
-//mohammad: eliminating unsat cores
+//mohammad: eliminating unsat cores from ROBDD
 void SpecCheckVocab::my_ROBDD_eliminate_UNSATCORES(vector<vocab_value_t> &choice)
 {
-  //remove last used assignment
   bdd_node current_bad_node = 1;
   bdd_node my_x;
-  
   unsigned int i = 0;
   for (; i < choice.size(); i++)
   {
     //neglect nodes with vuu
     if (!choice[i] == vuu)
     {
-      my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
+      my_x = make(my_bdd, i + 1, (int)!choice[i], (int)choice[i]);       //transform current assignment to node
       current_bad_node = apply(my_bdd, &my_and, current_bad_node, my_x); // and important values of the vocabs
     }
   }
-  
   main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_bad_node, 1)); // f & (~unsatcores)
 }
+
+//mohammad: eliminating dontcares from ROBDD
+// void SpecCheckVocab::my_ROBDD_eliminate_DONTCARES(vector<Variable> Variables)
+// {
+//   bdd_node current_dontcare_node = 1;
+//   bdd_node my_x;
+//   unsigned int i = 0;
+//   for (; i < Variables.size(); i++)
+//   {
+//     //neglecting unread variables
+//     //i.e. focusing on used ones
+//     if (Variables[i]->Value != "")
+//     {
+//       vector<int> indices = findAtomsIndices(Variables[i]); //finding indices of the used atoms
+//       for (int j = 0; j < indices.size(); j++)
+//       {
+//         my_x = make(my_bdd, j + 1, (int)!choice[j], (int)choice[j]);       //transform current assignment to node
+//         current_dontcare_node = apply(my_bdd, &my_and, current_dontcare_node, my_x); // and important values of the vocabs
+//       }
+//     }
+//   }
+//   main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, current_dontcare_node, 1)); // f & (~unsatcores)
+// }
 
 void SpecCheckVocab::computeEliminatedPatternsFromUnsatChoice(unsigned int core_size, Z3_ast *core)
 {
@@ -1332,8 +1352,8 @@ void SpecCheckVocab::traverse()
       cores we have till now; if one of the cores is satisfied we let the 
       user know and return i.e.
       if our choice conform_unsat_cores(...), then skip */
-  
-  //std::cout<<"Mohammad Haj Hussein\n";
+
+  // std::cout<<timedout;
   if (timedout)
   {
     //using normal traversal
@@ -1357,7 +1377,7 @@ void SpecCheckVocab::traverse()
         the subformulas in the vocab. 
         So we go over the choice vector and we assert/retract the 
         associated formulas corresponding to the choice evaluation. 
-  */
+    */
     if (depth == choice.size())
     {
       checkChoice();
@@ -1378,73 +1398,86 @@ void SpecCheckVocab::traverse()
   }
   else
   {
-    // //using ROBDD here
+    //using ROBDD here
 
-    // //remove last used assignment
-    // bdd_node last_assign = 1;
-    // bdd_node my_x;
-    // for (int i = 0; i < current_assignment.size(); i++)
-    // {
-    //   my_x = make(my_bdd, i, (int)!current_assignment[i], (int)current_assignment[i]); //transform current assignment to node
-    //   last_assign = apply(my_bdd, &my_and, last_assign, my_x);
-    // }
-    // main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
+    //remove last used assignment
+    if (finished_first_traversal)
+    {
+      std::cout << "removing last used assignment\n";
+      bdd_node last_assign = 1;
+      bdd_node my_x;
+      for (int i = 0; i < choice.size(); i++)
+      {
+        if (choice[i] != vuu)
+        {
+          my_x = make(my_bdd, i, (int)!choice[i], (int)choice[i]); //transform current assignment to node
+          last_assign = apply(my_bdd, &my_and, last_assign, my_x);
+        }
+      }
+      main_node = apply(my_bdd, &my_and, main_node, apply(my_bdd, &my_xor, last_assign, 1)); // f & (~last assignment)
+    }
+    // get an assignment
+    //adding a timeout
 
-    // // get an assignment
-    // //adding a timeout
-    // std::cout << "waiting to get new assignment...\n";
+    std::cout << "waiting to get new assignment...\n";
     // std::future_status status;
     // std::future<int> future = std::async(std::launch::async, [this]() {
     //   choice = my_oneSAT(my_bdd, main_node);
     //   return 1;
     // });
-    // if (satcount(my_bdd, my_nodes[0]) != 0)
-    // {
-    //   do
-    //   {
-    //     status = future.wait_for(std::chrono::minutes(10));
-    //     if (status == std::future_status::deferred)
-    //     {
-    //       std::cout << "deferred\n";
-    //     }
-    //     else if (status == std::future_status::timeout)
-    //     {
-    //       std::cout << "timeout \n returning to use old traversal ";
-    //       timedout = true;
-    //     }
-    //     else if (status == std::future_status::ready)
-    //     {
-    //       std::cout << "new assignment is ready!\n";
-    //     }
-    //   } while (status != std::future_status::ready || status != std::future_status::timeout);
-    //   if (timedout)
-    //   {
-    //     //reinitialize the choice vector
-    //     //can be improved by enumerating the remainging assignments of the choice vector
-    //     for (int i = 0; i < choice.size(); i++)
-    //     {
-    //       choice.at(i) = vuu;
-    //     }
-    //     traverse();
-    //   }
-    //   else
-    //   {
-    //     bool res = false;
-    //     TIME_IT(totalMatchUnsatCoreTime, timingFlags, TIME_MATCHUC,
-    //             (res = matchesUnsatCore(choice)))
 
-    //     if (res)
-    //     {
-    //       std::cout << "SPCHK: Ignore: subtree satisfies an eliminated pattern.";
-    //       //check if dont care
-    //       //read from the file
-    //       //chexk the roBDD
-    //       print_vector(choice);
-    //       traverse();
-    //     }
-    //     checkChoice();
-    //     traverse();
+    // if (my_bdd->satcount(main_node) != 0)
+    // {
+    // do
+    // {
+    //   status = future.wait_for(std::chrono::minutes(10));
+    //   if (status == std::future_status::deferred)
+    //   {
+    //     std::cout << "deferred\n";
     //   }
+    //   else if (status == std::future_status::timeout)
+    //   {
+    //     std::cout << "timeout \n returning to use old traversal ";
+    //     timedout = true;
+    //   }
+    //   else if (status == std::future_status::ready)
+    //   {
+    //     std::cout << "new assignment is ready!\n";
+    //   }
+    // } while (status != std::future_status::ready || status != std::future_status::timeout);
+    choice = my_oneSAT(my_bdd, main_node);
+    // std::cout<<"size of choice "<<choice.size()<<endl;
+    // print_vector(choice);
+    if (timedout)
+    {
+      //reinitialize the choice vector
+      //can be improved by enumerating the remainging assignments of the choice vector
+      for (int i = 0; i < choice.size(); i++)
+      {
+        choice.at(i) = vuu;
+      }
+      traverse();
+    }
+    else
+    {
+      bool res = false;
+      TIME_IT(totalMatchUnsatCoreTime, timingFlags, TIME_MATCHUC,
+              (res = matchesUnsatCore(choice)))
+
+      if (res)
+      {
+        std::cout << "SPCHK: Ignore: subtree satisfies an eliminated pattern.";
+        //check if dont care
+        //read from the file
+        //chexk the roBDD
+        print_vector(choice);
+        traverse();
+      }
+      checkChoice();
+      if (!finished_first_traversal)
+        finished_first_traversal = true;
+      traverse();
+    }
     // }
     // else
     // {
@@ -1455,7 +1488,7 @@ void SpecCheckVocab::traverse()
 }
 
 // mohammad: my_onesat(B, u) returns one satisfying assignment for node u in B
-vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bddptr B, bdd_node u)
+vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bdd *B, bdd_node u)
 {
 
   REQUIRES(is_bdd(B));
@@ -1468,11 +1501,13 @@ vector<vocab_value_t> SpecCheckVocab::my_oneSAT(bddptr B, bdd_node u)
   }
   else
   {
-    node* a = B->T[u];
+    node *a = B->T[u];
     int v = a->var;
+    std::cout << B->num_vars << endl;
     while (v <= B->num_vars)
     {
       //printf("x[%d]=", v);
+      std::cout << "Mohammad check\n";
       if (a->low != 0)
       {
         //printf("0\n");

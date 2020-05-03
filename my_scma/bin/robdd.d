@@ -64,8 +64,53 @@ robdd.o: robdd/robdd.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/4.8/bits/functional_hash.h \
  /usr/include/c++/4.8/bits/hash_bytes.h \
  /usr/include/c++/4.8/bits/range_access.h \
- /usr/include/c++/4.8/bits/vector.tcc robdd/xalloc.h /usr/include/stdio.h \
- /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/include/c++/4.8/bits/vector.tcc /usr/include/c++/4.8/iostream \
+ /usr/include/c++/4.8/ostream /usr/include/c++/4.8/ios \
+ /usr/include/c++/4.8/iosfwd /usr/include/c++/4.8/bits/stringfwd.h \
+ /usr/include/c++/4.8/bits/postypes.h /usr/include/c++/4.8/cwchar \
+ /usr/include/wchar.h /usr/include/stdio.h \
  /usr/lib/gcc/x86_64-linux-gnu/4.8/include/stdarg.h \
- /usr/include/x86_64-linux-gnu/bits/sys_errlist.h robdd/contracts.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/include/c++/4.8/bits/char_traits.h /usr/include/c++/4.8/cstdint \
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/include/stdint.h /usr/include/stdint.h \
+ /usr/include/c++/4.8/bits/localefwd.h \
+ /usr/include/x86_64-linux-gnu/c++/4.8/bits/c++locale.h \
+ /usr/include/c++/4.8/clocale /usr/include/locale.h \
+ /usr/include/x86_64-linux-gnu/bits/locale.h /usr/include/c++/4.8/cctype \
+ /usr/include/ctype.h /usr/include/c++/4.8/bits/ios_base.h \
+ /usr/include/c++/4.8/ext/atomicity.h \
+ /usr/include/x86_64-linux-gnu/c++/4.8/bits/gthr.h \
+ /usr/include/x86_64-linux-gnu/c++/4.8/bits/gthr-default.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/timex.h \
+ /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+ /usr/include/x86_64-linux-gnu/c++/4.8/bits/atomic_word.h \
+ /usr/include/c++/4.8/bits/locale_classes.h /usr/include/c++/4.8/string \
+ /usr/include/c++/4.8/bits/ostream_insert.h \
+ /usr/include/c++/4.8/bits/cxxabi_forced.h \
+ /usr/include/c++/4.8/bits/stl_function.h \
+ /usr/include/c++/4.8/backward/binders.h \
+ /usr/include/c++/4.8/bits/basic_string.h \
+ /usr/include/c++/4.8/ext/string_conversions.h \
+ /usr/include/c++/4.8/cstdlib /usr/include/c++/4.8/cstdio \
+ /usr/include/libio.h /usr/include/_G_config.h \
+ /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+ /usr/include/c++/4.8/cerrno /usr/include/errno.h \
+ /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
+ /usr/include/x86_64-linux-gnu/asm/errno.h \
+ /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+ /usr/include/c++/4.8/bits/basic_string.tcc \
+ /usr/include/c++/4.8/bits/locale_classes.tcc \
+ /usr/include/c++/4.8/streambuf /usr/include/c++/4.8/bits/streambuf.tcc \
+ /usr/include/c++/4.8/bits/basic_ios.h \
+ /usr/include/c++/4.8/bits/locale_facets.h /usr/include/c++/4.8/cwctype \
+ /usr/include/wctype.h \
+ /usr/include/x86_64-linux-gnu/c++/4.8/bits/ctype_base.h \
+ /usr/include/c++/4.8/bits/streambuf_iterator.h \
+ /usr/include/x86_64-linux-gnu/c++/4.8/bits/ctype_inline.h \
+ /usr/include/c++/4.8/bits/locale_facets.tcc \
+ /usr/include/c++/4.8/bits/basic_ios.tcc \
+ /usr/include/c++/4.8/bits/ostream.tcc /usr/include/c++/4.8/istream \
+ /usr/include/c++/4.8/bits/istream.tcc robdd/xalloc.h robdd/contracts.h \
  /usr/include/assert.h robdd/hashtable.h
