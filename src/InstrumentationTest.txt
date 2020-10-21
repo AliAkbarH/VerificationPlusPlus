@@ -1,0 +1,18 @@
+#include <iostream>
+#include<string>
+using namespace std;
+int linear_search( int* a, int left, int right, int d, int n){
+
+	if (left < 0 || right >= n || left > right) {
+		return -2; 
+	}
+	int i = left;
+	for (; i <= right; i = i + 1) {// pay attention to ++;
+		if (a[i] == d) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+

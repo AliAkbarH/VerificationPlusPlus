@@ -1,0 +1,24 @@
+scmaParser.cpp: In function ‘SCTheory* translation_unit(pscmaParser)’:
+scmaParser.cpp:985:7: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     d = NULL;
+       ^
+scmaParser.cpp: In function ‘unsigned int declaration(pscmaParser)’:
+scmaParser.cpp:1672:26: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     unsigned int varid = NULL;
+                          ^
+scmaParser.cpp: In function ‘scmaParser_declaration_specifier_return declaration_specifier(pscmaParser)’:
+scmaParser.cpp:1863:7: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     m = NULL;
+       ^
+scmaParser.cpp: In function ‘unsigned int type_modifier(pscmaParser)’:
+scmaParser.cpp:1982:25: warning: converting to non-pointer type ‘unsigned int’ from NULL [-Wconversion-null]
+     unsigned int mode = NULL;
+                         ^
+scmaParser.cpp: In function ‘scstring declarator(pscmaParser)’:
+scmaParser.cpp:2180:24: warning: passing NULL to non-pointer argument 1 of ‘scstring::scstring(long int)’ [-Wconversion-null]
+     scstring varname = NULL;
+                        ^
+scmaParser.cpp: In function ‘scstring direct_declarator(pscmaParser)’:
+scmaParser.cpp:2983:24: warning: passing NULL to non-pointer argument 1 of ‘scstring::scstring(long int)’ [-Wconversion-null]
+     scstring varname = NULL;
+                        ^
