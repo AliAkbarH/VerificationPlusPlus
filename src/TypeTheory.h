@@ -2,10 +2,10 @@
 #include <vector>
 #include <map>
 #include "llvm/Support/raw_ostream.h"
+
 using namespace std;
 using namespace llvm;
-enum VariableType : int
-{
+enum VariableType : int {
     Int,
     Char,
     Array,
@@ -17,12 +17,11 @@ enum VariableType : int
 };
 
 
-class Variable
-{
+class Variable {
 public:
     Variable();
 
-    Variable(string name, string type, string value="");
+    Variable(string name, string type, string value = "");
 
     string Name;
     string Type;
@@ -33,11 +32,10 @@ public:
     bool isUOp;
     bool isInput;
     bool isOutput;
-    
+
 };
 
-class BinaryOperation : public Variable
-{
+class BinaryOperation : public Variable {
 
 public:
     BinaryOperation(Variable *left, Variable *right, string operation);
@@ -46,10 +44,9 @@ public:
     string Operation;
 };
 
-class UnaryOperation : public Variable
-{
+class UnaryOperation : public Variable {
 public:
-    UnaryOperation(Variable*, string, bool );
+    UnaryOperation(Variable *, string, bool);
 
     string Operation;
     Variable *Operand;
@@ -57,8 +54,7 @@ public:
 
 };
 
-class TypeTheoryOutput
-{
+class TypeTheoryOutput {
 public:
     vector<Variable> Variables;
     vector<BinaryOperation> BOperations;
@@ -67,21 +63,28 @@ public:
     Variable FunctionUT;
 };
 
-class TypeTheoryOutputInternal
-{
+class TypeTheoryOutputInternal {
 public:
     vector<Variable> Variables;
     vector<BinaryOperation> BOperations;
     vector<UnaryOperation> UOperations;
     vector<Variable> RetrurnedVariables;
     Variable FunctionUT;
+
     void AddVariable(Variable *);
+
     void AddBOp(BinaryOperation *);
+
     void AddUOp(UnaryOperation *);
-    void UpdateToIndex(Variable*);
-    void UpdateToBound(Variable*);
-    void UpdateToOutput(Variable*);
+
+    void UpdateToIndex(Variable *);
+
+    void UpdateToBound(Variable *);
+
+    void UpdateToOutput(Variable *);
+
     TypeTheoryOutput DumpToOutput();
+
 private:
     map<string, Variable> VariablesByName;
 };
